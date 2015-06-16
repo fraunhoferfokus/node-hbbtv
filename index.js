@@ -18,4 +18,4 @@
  * AUTHORS: Louay Bassbouss (louay.bassbouss@fokus.fraunhofer.de)
  *
  ******************************************************************************/
- module.exports = require('./lib/peer-hbbtv');
+ module.exports = require('./lib/hbbtv');

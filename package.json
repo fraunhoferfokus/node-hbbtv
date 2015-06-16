@@ -1,5 +1,5 @@
 {
-    "name": "peer-hbbtv",
+    "name": "hbbtv",
 	"description": "Nodejs implementation of the HbbTV Companion Screen",
 	"version": "0.0.1",
 	"author": {
@@ -15,6 +15,6 @@
 		"ws": "0.7.2"
 	},
 	"readmeFilename": "Readme.md",
-	"_id": "peer-hbbtv@0.0.1",
-	"_from": "peer-hbbtv@*"
+	"_id": "hbbtv@0.0.1",
+	"_from": "hbbtv@*"
 }
