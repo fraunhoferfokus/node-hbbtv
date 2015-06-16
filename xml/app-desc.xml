@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<service xmlns="urn:dial-multiscreen-org:schemas:dial">
+  <name>{{=name}}</name>
+  <options allowStop="{{=allowStop}}"/>
+  <state>{{=state}}</state>
+  {{ if(typeof rel != "undefined" && typeof href != "undefined" && href){ }}
+  <link rel="{{=rel}}" href="{{=href}}"/>
+  {{ } }}
+</service>

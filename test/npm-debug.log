@@ -1,0 +1,69 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files (x86)\\nodejs\\\\node.exe',
+1 verbose cli   'C:\\Program Files (x86)\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   'hbbtv' ]
+2 info using npm@1.3.24
+3 info using node@v0.10.25
+4 verbose node symlink C:\Program Files (x86)\nodejs\\node.exe
+5 warn package.json peer-hbbtv@0.0.1 No repository field.
+6 warn package.json peer-dial@0.0.1 No repository field.
+7 verbose readDependencies using package.json deps
+8 verbose cache add [ 'hbbtv', null ]
+9 verbose cache add name=undefined spec="hbbtv" args=["hbbtv",null]
+10 verbose parsed url { protocol: null,
+10 verbose parsed url   slashes: null,
+10 verbose parsed url   auth: null,
+10 verbose parsed url   host: null,
+10 verbose parsed url   port: null,
+10 verbose parsed url   hostname: null,
+10 verbose parsed url   hash: null,
+10 verbose parsed url   search: null,
+10 verbose parsed url   query: null,
+10 verbose parsed url   pathname: 'hbbtv',
+10 verbose parsed url   path: 'hbbtv',
+10 verbose parsed url   href: 'hbbtv' }
+11 silly lockFile d7f703ce-hbbtv hbbtv
+12 verbose lock hbbtv C:\Users\lba\AppData\Roaming\npm-cache\d7f703ce-hbbtv.lock
+13 silly lockFile d7f703ce-hbbtv hbbtv
+14 silly lockFile d7f703ce-hbbtv hbbtv
+15 verbose addNamed [ 'hbbtv', '' ]
+16 verbose addNamed [ null, '*' ]
+17 silly lockFile fd58c26d-hbbtv hbbtv@
+18 verbose lock hbbtv@ C:\Users\lba\AppData\Roaming\npm-cache\fd58c26d-hbbtv.lock
+19 silly addNameRange { name: 'hbbtv', range: '*', hasData: false }
+20 verbose url raw hbbtv
+21 verbose url resolving [ 'https://registry.npmjs.org/', './hbbtv' ]
+22 verbose url resolved https://registry.npmjs.org/hbbtv
+23 info trying registry request attempt 1 at 16:53:57
+24 http GET https://registry.npmjs.org/hbbtv
+25 http 404 https://registry.npmjs.org/hbbtv
+26 silly registry.get cb [ 404,
+26 silly registry.get   { server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+26 silly registry.get     'content-type': 'application/json',
+26 silly registry.get     'cache-control': 'max-age=0',
+26 silly registry.get     'content-length': '51',
+26 silly registry.get     'accept-ranges': 'bytes',
+26 silly registry.get     date: 'Mon, 15 Jun 2015 14:53:57 GMT',
+26 silly registry.get     via: '1.1 varnish',
+26 silly registry.get     age: '0',
+26 silly registry.get     connection: 'keep-alive',
+26 silly registry.get     'x-served-by': 'cache-fra1232-FRA',
+26 silly registry.get     'x-cache': 'MISS',
+26 silly registry.get     'x-cache-hits': '0',
+26 silly registry.get     'x-timer': 'S1434380037.058129,VS0,VE178' } ]
+27 silly lockFile fd58c26d-hbbtv hbbtv@
+28 silly lockFile fd58c26d-hbbtv hbbtv@
+29 error 404 'hbbtv' is not in the npm registry.
+29 error 404 You should bug the author to publish it
+29 error 404 It was specified as a dependency of 'peer-hbbtv'
+29 error 404
+29 error 404 Note that you can also install from a
+29 error 404 tarball, folder, or http url, or git url.
+30 error System Windows_NT 6.1.7601
+31 error command "C:\\Program Files (x86)\\nodejs\\\\node.exe" "C:\\Program Files (x86)\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "hbbtv"
+32 error cwd C:\Users\lba\Git\gitlab\peer-hbbtv\test
+33 error node -v v0.10.25
+34 error npm -v 1.3.24
+35 error code E404
+36 verbose exit [ 1, true ]

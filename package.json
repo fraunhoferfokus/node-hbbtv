@@ -1,0 +1,20 @@
+{
+    "name": "peer-hbbtv",
+	"description": "Nodejs implementation of the HbbTV Companion Screen",
+	"version": "0.0.1",
+	"author": {
+		"name": "Louay Bassbouss",
+		"email": "louay.bassbouss@fokus.fraunhofer.de"
+	},
+	"keywords": ["ssdp", "upnp", "nsd", "discovery", "launch", "dial","hbbtv","cs"],
+	"main": "index",
+	"dependencies" : {
+		"peer-dial": "0.0.1",
+		"ejs": "1.0.0",
+		"node-uuid": "1.4.1",
+		"ws": "0.7.2"
+	},
+	"readmeFilename": "Readme.md",
+	"_id": "peer-hbbtv@0.0.1",
+	"_from": "peer-hbbtv@*"
+}

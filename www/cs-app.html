@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Companion Screen App</title>
+</head>
+<body>
+Open log console to see debug output
+<script type="text/javascript">
+    var app2appRemoteBaseUrl = "ws://localhost:8080/remote/" ;
+    var appEndpoint = "org.mychannel.myapp";
+    var ws = new WebSocket(app2appRemoteBaseUrl + appEndpoint);
+    ws.onopen = function(evt) {
+        console.log("Connection waiting ...");
+    };
+    ws.onclose = function(evt) {
+        console.log("Connection closed.");
+    };
+    ws.onerror = function (evt) {
+        console.log("Connection error.");
+    };
+    ws.onmessage = function(evt) {
+        if (evt.data == "pairingcomplete") {
+            console.log("connection paired");
+            ws.onmessage = function(evt) {
+                console.log( "Received Message: " + evt.data);
+            };
+            ws.send("Hello from Companion Screen");
+        } else {
+            console.log("Unexpected message received from terminal.");
+            ws.close();
+        }
+    };
+</script>
+</body>
+</html>
