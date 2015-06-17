@@ -21,7 +21,7 @@
 var hbbtv = require("../lib/hbbtv.js");
 var HbbTVApp2AppServer = hbbtv.App2AppServer;
 var http = require('http');
-
+var PORT = 8080;
 var httpServer = http.createServer(function(req, rsp) {
     console.log((new Date()) + ' Received request for ' + req.url);
     rsp.writeHead(404);
@@ -35,6 +35,9 @@ var hbbtvApp2AppServer = new HbbTVApp2AppServer(httpServer, function (err) {
         console.log("HbbTV WS Server created successfully");
     }
 });
-httpServer.listen(8080, function() {
-    console.log((new Date()) + ' Server is listening on port 8080');
+
+httpServer.listen(PORT, function() {
+    var address = httpServer.address();
+    var port = address && address.port || PORT;
+    console.log((new Date()) + ' Server is listening on port ', port);
 });
