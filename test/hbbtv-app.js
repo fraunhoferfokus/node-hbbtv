@@ -26,6 +26,7 @@
             };
             ws.onmessage = function(evt) {
                 if (evt.data == "pairingcomplete") {
+                    window.open("http://www.google.de","_blank");
                     console.log("connection ",index," paired");
                     ws.onmessage = function(evt) {
                         if(typeof evt.data == "string"){

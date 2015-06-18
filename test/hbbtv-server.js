@@ -18,26 +18,35 @@
  * AUTHORS: Louay Bassbouss (louay.bassbouss@fokus.fraunhofer.de)
  *
  ******************************************************************************/
-var hbbtv = require("../lib/hbbtv.js");
+var hbbtv = require("../index.js");
 var HbbTVApp2AppServer = hbbtv.App2AppServer;
+var HbbTVDialServer = hbbtv.DialServer;
 var http = require('http');
+var express = require("express");
+var app = express();
 var PORT = 8080;
-var httpServer = http.createServer(function(req, rsp) {
-    console.log((new Date()) + ' Received request for ' + req.url);
-    rsp.writeHead(404);
-    rsp.end();
+var DIAL_PREFIX = "/dial";
+app.set("port",PORT);
+app.set("dial-prefix",DIAL_PREFIX);
+// The HTTP Server is used to in the HbbTVApp2AppServer and the HbbTVDialServer
+var httpServer = http.createServer(app);
+
+var hbbtvApp2AppServer = new HbbTVApp2AppServer(httpServer).on("ready", function () {
+    console.log("HbbTV App2App Server is ready");
+}).on("stop", function () {
+    console.log("HbbTV App2App Server is stopped");
 });
-var hbbtvApp2AppServer = new HbbTVApp2AppServer(httpServer, function (err) {
-    if(err){
-        console.error("error on create HbbTV WS Server",err);
-    }
-    else {
-        console.log("HbbTV WS Server created successfully");
-    }
+
+var hbbtvDialServer = new HbbTVDialServer(app).on("ready", function () {
+    console.log("HbbTV DIAL Server is ready");
+}).on("stop", function () {
+    console.log("HbbTV DIAL Server is stopped");
 });
 
 httpServer.listen(PORT, function() {
     var address = httpServer.address();
     var port = address && address.port || PORT;
-    console.log((new Date()) + ' Server is listening on port ', port);
+    hbbtvApp2AppServer.start();
+    hbbtvDialServer.start();
+    console.log("HbbTV Server is listening on port ", port);
 });
