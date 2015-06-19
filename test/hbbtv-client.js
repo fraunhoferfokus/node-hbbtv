@@ -20,14 +20,30 @@
  ******************************************************************************/
 var hbbtv = require("../index.js");
 var HbbTVDialClient = hbbtv.DialClient;
+var HbbTVCsLauncher = hbbtv.CsLauncher;
+var http = require('http');
+var express = require("express");
+var app = express();
+var PORT = 8090;
+var DIAL_PREFIX = "/dial";
+app.set("port",PORT);
+app.set("dial-prefix",DIAL_PREFIX);
+var httpServer = http.createServer(app);
 
 var hbbTVDialClient = new HbbTVDialClient().on("ready", function () {
     console.log("HbbTV DIAL Client is ready");
 }).on("stop", function () {
     console.log("HbbTV DIAL Client is stopped");
-}).start();
+});
 
-setTimeout(function () {
-    hbbTVDialClient.refresh();
-    //hbbTVDialClient.stop();
-}, 5000);
+var hbbTVCsLauncher = new HbbTVCsLauncher(app).on("ready", function () {
+    console.log("HbbTV CS Launcher is ready");
+}).on("stop", function () {
+    console.log("HbbTV CS Launcher is stopped");
+});
+
+httpServer.listen(PORT, function() {
+    hbbTVDialClient.start();
+    hbbTVCsLauncher.start();
+    console.log("HbbTV Client is listening on port ", PORT);
+});

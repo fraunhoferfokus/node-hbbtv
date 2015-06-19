@@ -44,9 +44,7 @@ var hbbtvDialServer = new HbbTVDialServer(app).on("ready", function () {
 });
 
 httpServer.listen(PORT, function() {
-    var address = httpServer.address();
-    var port = address && address.port || PORT;
     hbbtvApp2AppServer.start();
     hbbtvDialServer.start();
-    console.log("HbbTV Server is listening on port ", port);
+    console.log("HbbTV Server is listening on port ", PORT);
 });
