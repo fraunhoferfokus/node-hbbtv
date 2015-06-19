@@ -40,16 +40,22 @@ var hbbTVDialClient = new HbbTVDialClient().on("ready", function () {
     dialDevice.launchApp("HbbTV","http://localhost:63342/node-hbbtv/test/hbbtv-app.html", "text/plain", function (launchRes, err) {
         if(typeof launchRes != "undefined"){
             var app2appUrl = appInfo.additionalData.X_HbbTV_App2AppURL;
-            opn("http://localhost:63342/node-hbbtv/test/cs-app.html#"+app2appUrl);
+            //opn("http://localhost:63342/node-hbbtv/test/cs-app.html#"+app2appUrl);
             console.log("HbbTV Launched Successfully",launchRes);
+            dialDevice.stopApp("YouTube","run", function (statusCode,err) {
+                if(err){
+                    console.error("Error on stop YouTube App:", err);
+                }
+                else {
+                    console.log("DIAL stop YouTube App status: ",statusCode);
+                }
+            });
         }
         else if(err){
             console.log("Error on Launch HbbTV App",launchRes);
         }
     });
 });
-
-
 
 var hbbTVCsLauncher = new HbbTVCsLauncher(app).on("ready", function () {
     console.log("HbbTV CS Launcher is ready");
