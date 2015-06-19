@@ -10,7 +10,7 @@
         WebSocket = hbbtv.WebSocket;
     }
     var run = function(){
-        var app2appLocalBaseUrl = "ws://10.147.175.140:8080/local/" ;
+        var app2appLocalBaseUrl = (location && location.hash.substr(1)) || "ws://localhost:8080/local/" ;
         var appEndpoint = "org.mychannel.myapp";
         var createConnection = function (index) {
             var ws = new WebSocket(app2appLocalBaseUrl + appEndpoint);

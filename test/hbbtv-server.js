@@ -26,6 +26,7 @@ var express = require("express");
 var app = express();
 var PORT = 8080;
 var DIAL_PREFIX = "/dial";
+http.globalAgent.maxSockets = 100;
 app.set("port",PORT);
 app.set("dial-prefix",DIAL_PREFIX);
 // The HTTP Server is used to in the HbbTVApp2AppServer and the HbbTVDialServer

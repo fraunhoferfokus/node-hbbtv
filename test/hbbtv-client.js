@@ -28,13 +28,28 @@ var PORT = 8090;
 var DIAL_PREFIX = "/dial";
 app.set("port",PORT);
 app.set("dial-prefix",DIAL_PREFIX);
+http.globalAgent.maxSockets = 100;
 var httpServer = http.createServer(app);
+var opn = require('opn');
 
 var hbbTVDialClient = new HbbTVDialClient().on("ready", function () {
     console.log("HbbTV DIAL Client is ready");
 }).on("stop", function () {
     console.log("HbbTV DIAL Client is stopped");
+}).on("found", function (dialDevice, appInfo) {
+    dialDevice.launchApp("HbbTV","http://localhost:63342/node-hbbtv/test/hbbtv-app.html", "text/plain", function (launchRes, err) {
+        if(typeof launchRes != "undefined"){
+            var app2appUrl = appInfo.additionalData.X_HbbTV_App2AppURL;
+            opn("http://localhost:63342/node-hbbtv/test/cs-app.html#"+app2appUrl);
+            console.log("HbbTV Launched Successfully",launchRes);
+        }
+        else if(err){
+            console.log("Error on Launch HbbTV App",launchRes);
+        }
+    });
 });
+
+
 
 var hbbTVCsLauncher = new HbbTVCsLauncher(app).on("ready", function () {
     console.log("HbbTV CS Launcher is ready");
