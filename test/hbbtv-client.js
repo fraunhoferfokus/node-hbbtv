@@ -36,31 +36,31 @@ var hbbTVDialClient = new HbbTVDialClient().on("ready", function () {
     console.log("HbbTV DIAL Client is ready");
 }).on("stop", function () {
     console.log("HbbTV DIAL Client is stopped");
-}).on("found", function (dialDevice, appInfo) {
-    dialDevice.launchApp("HbbTV","http://famium.fokus.fraunhofer.de/apps/hbbtv/hbbtv-app.html", "text/plain", function (launchRes, err) {
-        if(typeof launchRes != "undefined"){
-            var app2appUrl = appInfo.additionalData.X_HbbTV_App2AppURL;
-            opn("http://famium.fokus.fraunhofer.de/apps/hbbtv/cs-app.html#"+app2appUrl+"/");
-            console.log("HbbTV Launched Successfully",launchRes);
-            dialDevice.stopApp("YouTube","run", function (statusCode,err) {
-                if(err){
-                    console.error("Error on stop YouTube App:", err);
-                }
-                else {
-                    console.log("DIAL stop YouTube App status: ",statusCode);
-                }
-            });
+}).on("found", function (terminal) {
+    var info = terminal.getInfo();
+    console.log("DIAL Terminal ", info.friendlyName," (", terminal.getAppLaunchURL(), ") found");
+    var channel = (""+Math.random()).substr(2,16);
+    terminal.launchHbbTVApp({
+        "appUrlBase": "http://famium.fokus.fraunhofer.de/apps/hbbtv/hbbtv-app.html",
+        "appLocation": "?channel="+channel
+    }, function (launchRes,err) {
+        if(err){
+            console.error("Error on launch HbbTV App", err);
         }
-        else if(err){
-            console.log("Error on Launch HbbTV App",launchRes);
+        else {
+            console.log("HbbTV App launched successfully: ",launchRes || "");
         }
     });
+}).on("error", function (err) {
+    console.error(err);
 });
 
 var hbbTVCsLauncher = new HbbTVCsLauncher(app).on("ready", function () {
     console.log("HbbTV CS Launcher is ready");
 }).on("stop", function () {
     console.log("HbbTV CS Launcher is stopped");
+}).on("error", function (err) {
+    console.error(err);
 });
 
 httpServer.listen(PORT, function() {

@@ -1,5 +1,36 @@
 (function(ns,oipfObjectFactory){
 
+    var parseParameters = function(query){
+        var dict = {};
+        query = query.substr(query.lastIndexOf("#")+1);
+        if(query){
+            var params = query.split("&");
+            for (var i = 0; i < params.length; i++) {
+                var index = params[i].indexOf("=");
+                var key = index>-1?params[i].substr(0,index):params[i];
+                var value = index>-1?params[i].substr(index+1):"";
+                if(typeof dict[key] == "undefined"){
+                    dict[key] = value;
+                }
+                else if(typeof dict[key] == "string"){
+                    dict[key] = [dict[key],value];
+                }
+                else if(typeof dict[key] == "object"){
+                    dict[key].push(value);
+                }
+            };
+        }
+        return dict;
+    };
+
+    var hash = location.hash.substr(location.hash.lastIndexOf("#")+1);
+    var csManagerParameters = parseParameters(hash);
+    var port = csManagerParameters.port;
+    var hostname = csManagerParameters.hostname;
+    var app2AppLocalUrl = "ws://127.0.0.1:"+port+"/local";
+    var app2AppRemoteUrl = "ws://"+hostname+":"+port+"/remote";
+    var userAgent = navigator.userAgent;
+    var appLaunchUrl = "http://"+hostname+":"+port+"/dial/apps/HbbTV";
     /**
      * Config is set after hbbtv is set
      */
@@ -70,8 +101,8 @@
      * String getAppLaunchURL()
      * Returns the URL of the application launch service endpoint for the terminal that the calling HbbTV application is running on.
      */
-    var getAppLaunchURL =function(){
-
+    var getAppLaunchURL = function(){
+        return appLaunchUrl;
     };
 
     /**
@@ -80,7 +111,7 @@
      * The URL retrieved by this method shall end with a slash (‘/’) character.
      */
     var getApp2AppLocalBaseURL =function(){
-
+        return app2AppLocalUrl;
     };
 
     /**
@@ -89,7 +120,7 @@
      * The URL retrieved by this method shall end with a slash (‘/’) character
      */
     var getApp2AppRemoteBaseURL =function(){
-
+        return app2AppRemoteUrl;
     };
 
     var HbbTVCSManager = function(){
