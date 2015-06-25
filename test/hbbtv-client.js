@@ -41,7 +41,7 @@ var hbbTVDialClient = new HbbTVDialClient().on("ready", function () {
     console.log("DIAL Terminal ", info.friendlyName," (", terminal.getAppLaunchURL(), ") found");
     var channel = (""+Math.random()).substr(2,16);
     terminal.launchHbbTVApp({
-        "appUrlBase": "http://famium.fokus.fraunhofer.de/apps/hbbtv/hbbtv-app.html",
+        "appUrlBase": /*"http://hbbtv-live.irt.de:8080/companionscreen-focus/",*/"http://localhost:63342/peer-hbbtv/www/hbbtv-app.html",//"http://famium.fokus.fraunhofer.de/apps/hbbtv/hbbtv-app.html",
         "appLocation": "?channel="+channel
     }, function (launchRes,err) {
         if(err){

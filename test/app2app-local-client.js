@@ -10,7 +10,7 @@
         WebSocket = hbbtv.WebSocket;
     }
     var run = function(){
-        var app2appLocalBaseUrl = (location && location.hash.substr(1)) || "ws://localhost:8080/local/" ;
+        var app2appLocalBaseUrl = "ws://localhost:8080/local/" ;
         var appEndpoint = "org.mychannel.myapp";
         var createConnection = function (index) {
             var ws = new WebSocket(app2appLocalBaseUrl + appEndpoint);
@@ -26,7 +26,6 @@
             };
             ws.onmessage = function(evt) {
                 if (evt.data == "pairingcomplete") {
-                    window.open("http://www.google.de","_blank");
                     console.log("connection ",index," paired");
                     ws.onmessage = function(evt) {
                         if(typeof evt.data == "string"){

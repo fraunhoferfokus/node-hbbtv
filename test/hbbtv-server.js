@@ -51,7 +51,7 @@ var hbbtvDialServer = new HbbTVDialServer(app).on("ready", function () {
     console.error("HbbTVDialServer Error", err);
 });
 
-var hbbTVCSManager = new HbbTVCSManager(app).on("ready", function () {
+var hbbTVCSManager = new HbbTVCSManager(/*app*/httpServer).on("ready", function () {
     console.log("HbbTV CS Manager is ready");
 }).on("stop", function () {
     console.log("HbbTV CS Manager is stopped");

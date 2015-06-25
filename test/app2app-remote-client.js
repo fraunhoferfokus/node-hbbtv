@@ -10,7 +10,7 @@
         WebSocket = hbbtv.WebSocket;
     }
     var run = function(){
-        var app2appRemoteBaseUrl = (location && location.hash.substr(1)) || "ws://localhost:8080/remote/" ;
+        var app2appRemoteBaseUrl = "ws://localhost:8080/remote/" ;
         var appEndpoint = "org.mychannel.myapp";
         var ws = new WebSocket(app2appRemoteBaseUrl + appEndpoint);
         ws.binaryType = "arraybuffer";

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>HbbTV App</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="js/hbbtv-cs-manager-polyfill.js"></script>
+</head>
+<body>
+<h3>Sample HbbTV Application</h3>
+<button id="discoverLaunchersBtn">Discover CS Launchers</button>
+<br>
+<div id="info"></div>
+<br>
+<div style="display: none;" id="csAppUrl"><label for="csAppUrlInput">Enter URL to launch on CS: </label><input id="csAppUrlInput"></div>
+<br>
+<ul id="csLaunchers">
+
+</ul>
+<script type="text/javascript">
+    var qualifyURL = function(url){
+        var a = document.createElement('a');
+        a.href = url;
+        return a.href;
+    };
+
+    var launchCsApp = function (enumId) {
+        var payload = {
+            "launch": [
+                {"launchUrl": $("#csAppUrlInput").val()+"#"+csManager.getApp2AppRemoteBaseURL(), "appType": "html"}
+            ]
+        };
+        csManager.launchCSApp(enumId, payload, function (res) {
+            console.log("launch app result code", res);
+        });
+    };
+    var csManager = oipfObjectFactory.createCSManager();
+    var app2appLocalBaseUrl = csManager.getApp2AppLocalBaseURL();
+    var appEndpoint = "org.mychannel.myapp";
+    var createConnection = function (index) {
+        var ws = new WebSocket(app2appLocalBaseUrl + appEndpoint);
+        ws.binaryType = "arraybuffer";
+        ws.onopen = function(evt) {
+            console.log("Connection ",index," waiting ...");
+        };
+        ws.onclose = function(evt) {
+            console.log("Connection ",index," closed.");
+        };
+        ws.onerror = function (evt) {
+            console.log("Connection error.");
+        };
+        ws.onmessage = function(evt) {
+            if (evt.data == "pairingcomplete") {
+                console.log("connection ",index," paired");
+                ws.onmessage = function(evt) {
+                    if(typeof evt.data == "string"){
+                        console.log( "Received Message: " + evt.data);
+                    }
+                    else {
+                        var data = typeof Buffer != "undefined"?new Buffer(evt.data): new Int8Array(evt.data);
+                        console.log("Received Binary Message of " + data.length + " bytes", data);
+                    }
+                };
+                ws.send("Hello from HbbTV App: "+index);
+                createConnection(index+1);
+            } else {
+                console.log("Unexpected message received from terminal.");
+                ws.close();
+            }
+        };
+    };
+    createConnection(0);
+    $("#discoverLaunchersBtn").click(function () {
+        $("#info").html("Searching for cs launchers:  please wait ...");
+        $("#csLaunchers").empty();
+        $("#discoverLaunchersBtn").attr("disabled", true);
+        $("#csAppUrl").hide();
+        csManager.discoverCSLaunchers(function (csLaunchers) {
+            $("#discoverLaunchersBtn").attr("disabled", false);
+            $("#info").empty();
+            $(csLaunchers).each(function (i,csLauncher) {
+                $("#csLaunchers").append("<li id='"+csLauncher.enum_id+"'>"+csLauncher.friendly_name+"  <button onclick='launchCsApp("+csLauncher.enum_id+")'>Launch</button></li>");
+            });
+            if(csLaunchers.length==0){
+                $("#info").html("No cs launchers found. Click on the discover button to search again");
+            }
+            else{
+                $("#csAppUrl").show();
+            }
+            console.log("cs launchers found",csLaunchers);
+        });
+    });
+    $("#csAppUrlInput").val(qualifyURL("cs-app.html"));
+</script>
+</body>
+</html>
