@@ -103,13 +103,13 @@ Run Example HbbTV App and CS Web App hosted on GitHub
 
 The fastest way to test this module is by using the example HbbTV and CS applications hosted on github.io:
 * HbbTV App: `http://fraunhoferfokus.github.io/node-hbbtv/www/hbbtv-app.html`
-* CS Web App: `http://fraunhoferfokus.github.io/node-hbbtv/www/cs-app.html`
+* CS Web App: `http://faunhoferfokus.github.io/node-hbbtv/www/cs-app.html`
 
 ### Run example:
 
 1. start `hbbtv` module in `terminal` mode: `hbbtv -m terminal -p 8080`
 2. start `hbbtv` module in `cs` mode: `hbbtv -m cs -p 8090`    
-   > It is possible to start `hbbtv` in ``erminal` and `cs mode on different ports on the same device.
+   > It is possible to start `hbbtv` in `terminal` and `cs mode on different ports on the same device.
    > For better understanding, it is recommended to use two different devices one for terminal and one for cs. both devices must be
    > in the same network in order to discover and communicate with each others using DIAL and WS.
 
@@ -296,8 +296,75 @@ API documentation coming soon.
 ```
 
 Develop Node.js HbbTV CS Client
--------------------------
-Documentation coming soon
+-------------------------------
+the `hbbtv` module can also used to implement HbbTV CS Node.js clients without the need to develop CS Web App that runs
+in the Browser. This is for example useful to run HbbTV CS test cases or to use in Node.js applications to discover HbbTV
+terminals, launch HbbTV applications and create WS connections to the remote App2App Endpoint of discovered terminals.
+The following example illustrates the usage of supported features
+
+ ```javascript
+ var hbbtv = require("hbbtv");
+ var HbbTVDialClient = hbbtv.HbbTVDialClient;
+ var WebSocket = hbbtv.WebSocket;
+ // create a hbbTVDialClient instance and add listeners for ready, stop, found and error events
+ var hbbTVDialClient = new HbbTVDialClient().on("ready", function () {
+     console.log("HbbTV DIAL Client is ready");
+ }).on("stop", function () {
+     console.log("HbbTV DIAL Client is stopped");
+ }).on("found", function (terminal) {
+     // found events are triggered each time a new HbbTV terminal is found
+     console.log("HbbTV Terminal ", terminal.getFriendlyName()," (", terminal.getAppLaunchURL(), ") found");
+     var channel = (""+Math.random()).substr(2,16);
+     // launch HbbTV App on each discovered terminal
+     terminal.launchHbbTVApp({
+         "appUrlBase": "http://fraunhoferfokus.github.io/node-hbbtv/www/hbbtv-app.html",
+         "appLocation": "?channel="+channel
+     }, function (launchRes,err) {
+         if(err){
+             console.error("Error on launch HbbTV App", err);
+         }
+         else {
+             console.log("HbbTV App launched successfully: ",launchRes || "");
+             // create App2App connection after application is launched
+             createConnection(terminal, channel);
+         }
+     });
+ }).on("error", function (err) {
+     console.error(err);
+ });
+ var createConnection = function (terminal, channel) {
+     var app2appRemoteBaseUrl = terminal.getApp2AppURL();
+     var ws = new WebSocket(app2appRemoteBaseUrl + channel);
+     ws.binaryType = "arraybuffer";
+     ws.onopen = function(evt) {
+         console.log("Connection waiting ...");
+     };
+     ws.onclose = function(evt) {
+         console.log("Connection closed.");
+     };
+     ws.onerror = function (evt) {
+         console.log("Connection error.");
+     };
+     ws.onmessage = function(evt) {
+         if (evt.data == "pairingcomplete") {
+             console.log("pairing complete");
+             ws.onmessage = function(evt) {
+                 console.log( "Received Message: " + evt.data);
+             };
+             var data = "Hello from Companion Screen";
+             ws.send(data);
+             var array = [0,1,2,3,4,5,6,7,8,9];
+             data = typeof Buffer != "undefined"?new Buffer(array): new Int8Array(array).buffer;
+             ws.send(data);
+         } else {
+             console.log("Unexpected message received from terminal.");
+             ws.close();
+         }
+     };
+ };
+ hbbTVDialClient.start();
+ // hbbTVDialClient.stop();
+ ```
 
 Android HbbTV CS Client
 -----------------

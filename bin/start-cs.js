@@ -24,7 +24,6 @@ if(!PORT){
     process.exit(1);
 }
 var hbbtv = require("../index.js");
-var HbbTVDialClient = hbbtv.HbbTVDialClient;
 var HbbTVTerminalManager = hbbtv.HbbTVTerminalManager;
 var CsLauncherDialServer = hbbtv.CsLauncherDialServer;
 var http = require('http');
@@ -35,29 +34,6 @@ app.set("port",PORT);
 app.set("dial-prefix",DIAL_PREFIX);
 http.globalAgent.maxSockets = 100;
 var httpServer = http.createServer(app);
-
-var hbbTVDialClient = new HbbTVDialClient().on("ready", function () {
-    console.log("HbbTV DIAL Client is ready");
-}).on("stop", function () {
-    console.log("HbbTV DIAL Client is stopped");
-}).on("found", function (terminal) {
-    var info = terminal.getInfo();
-    console.log("DIAL Terminal ", info.friendlyName," (", terminal.getAppLaunchURL(), ") found");
-    var channel = (""+Math.random()).substr(2,16);
-    terminal.launchHbbTVApp({
-        "appUrlBase": /*"http://hbbtv-live.irt.de:8080/companionscreen-focus/",*/"http://localhost:63342/peer-hbbtv/www/hbbtv-app.html",//"http://famium.fokus.fraunhofer.de/apps/hbbtv/hbbtv-app.html",
-        "appLocation": "?channel="+channel
-    }, function (launchRes,err) {
-        if(err){
-            console.error("Error on launch HbbTV App", err);
-        }
-        else {
-            console.log("HbbTV App launched successfully: ",launchRes || "");
-        }
-    });
-}).on("error", function (err) {
-    console.error(err);
-});
 
 var csLauncherDialServer = new CsLauncherDialServer(app).on("ready", function () {
     console.log("HbbTV CS Launcher is ready");
@@ -76,7 +52,6 @@ var hbbTVTerminalManager = new HbbTVTerminalManager(httpServer).on("ready", func
 });
 
 httpServer.listen(PORT, function() {
-    //hbbTVDialClient.start();
     console.log("HbbTV Companion Screen is listening on port ", PORT);
     console.log("***** Please append the hash query '#port="+PORT+"'"," to the URL of your CS Web App.\n***** The JavaScript Lib 'hbbtv-manager-polyfill.js' must be included in the CS Web App");
     hbbTVTerminalManager.start();

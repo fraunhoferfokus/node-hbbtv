@@ -1,22 +1,55 @@
 <!DOCTYPE html>
-<html>
+<html style="height: 100%; padding: 0; margin: 0;">
 <head lang="en">
     <meta charset="UTF-8">
     <title>Companion Screen App</title>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
     <script type="text/javascript" src="js/hbbtv-manager-polyfill.js"></script>
 </head>
-<body>
+<body style="height: 96%; ">
 <h3>Sample CS Web Application</h3>
-<button id="discoverTerminalsBtn">Discover HbbTV Terminals</button>
-<br>
-<div id="info"></div>
-<br>
-<ul id="terminals">
+<div style="float: left; width: 48%;">
+    <button id="discoverTerminalsBtn">Discover HbbTV Terminals</button>
+    <br>
+    <div id="info"></div>
+    <br>
+    <ul id="terminals">
 
-</ul>
+    </ul>
+</div>
+<div style="float: left; width: 48%; height: 90%">
+    <textarea id="log" style="width: 98%; height: 98%" disabled="true"></textarea>
+</div>
+
 <script type="text/javascript">
-    var channel = "org.mychannel.myapp";
+    var log = function (msg) {
+        console.log(msg);
+        var logElem = $("#log");
+        logElem.val(logElem.val()+msg+"\n");
+        logElem.scrollTop(logElem[0].scrollHeight);
+    };
+    var parseParameters = function(query){
+        var dict = {};
+        if(query){
+            var params = query.split("&");
+            for (var i = 0; i < params.length; i++) {
+                var index = params[i].indexOf("=");
+                var key = index>-1?params[i].substr(0,index):params[i];
+                var value = index>-1?params[i].substr(index+1):"";
+                if(typeof dict[key] == "undefined"){
+                    dict[key] = value;
+                }
+                else if(typeof dict[key] == "string"){
+                    dict[key] = [dict[key],value];
+                }
+                else if(typeof dict[key] == "object"){
+                    dict[key].push(value);
+                }
+            };
+        }
+        return dict;
+    };
+
     var qualifyURL = function(url){
         var a = document.createElement('a');
         a.href = url;
@@ -26,34 +59,32 @@
     var launchHbbTVApp = function (index) {
         var terminal = terminals[index];
         var options = {
-            "orgId": 0,
-            "appId": 0,
             "appUrlBase": qualifyURL("hbbtv-app.html"),
             "appLocation": "?channel="+channel
         };
         terminal && terminalManager.launchHbbTVApp(terminal.enum_id, options, function (res) {
-            console.log("launch app result code", res);
+            log("launch app result code "+ res);
         });
     };
-    var connect = function (index) {
+    var connect = function (index,app2appURL) {
         var terminal = terminals[index];
-        var app2appRemoteBaseUrl = terminal && terminal.X_HbbTV_App2AppURL ;
+        var app2appRemoteBaseUrl = terminal && terminal.X_HbbTV_App2AppURL || app2appURL;
         var ws = new WebSocket(app2appRemoteBaseUrl + channel);
         ws.binaryType = "arraybuffer";
         ws.onopen = function(evt) {
-            console.log("Connection waiting ...");
+            log("Connection waiting ...");
         };
         ws.onclose = function(evt) {
-            console.log("Connection closed.");
+            log("Connection closed.");
         };
         ws.onerror = function (evt) {
-            console.log("Connection error.");
+            log("Connection error.");
         };
         ws.onmessage = function(evt) {
             if (evt.data == "pairingcomplete") {
-                console.log("connection paired");
+                log("connection paired");
                 ws.onmessage = function(evt) {
-                    console.log( "Received Message: " + evt.data);
+                    log( "Received Message: " + evt.data);
                 };
                 var data = "Hello from Companion Screen";
                 ws.send(data);
@@ -61,13 +92,20 @@
                 data = typeof Buffer != "undefined"?new Buffer(array): new Int8Array(array).buffer;
                 ws.send(data);
             } else {
-                console.log("Unexpected message received from terminal.");
+                log("Unexpected message received from terminal.");
                 ws.close();
             }
         };
     };
+    var searchParameters = parseParameters(location.search.substr(1));
+    var channel = searchParameters.channel || "org.mychannel.myapp";
     var terminalManager = hbbtv && hbbtv.createTerminalManager();
     var terminals = [];
+    if(searchParameters.app2appURL){
+        log("it seems that this app is launched by remote from an HbbTV Application with remote App2App Endpoint: "+searchParameters.app2appURL);
+        log("Create WS connection "+searchParameters.app2appURL+channel);
+        connect(-1,searchParameters.app2appURL);
+    }
     $("#discoverTerminalsBtn").click(function () {
         $("#info").html("Searching for HbbTV Terminals:  please wait ...");
         $("#terminals").empty();
@@ -82,7 +120,7 @@
             if(terminals.length==0){
                 $("#info").html("No HbbTV Terminals found. Click on the discover button to search again");
             }
-            console.log("HbbTV terminals found",terminals);
+            log(terminals.length+" HbbTV terminals found");
         });
     });
 </script>

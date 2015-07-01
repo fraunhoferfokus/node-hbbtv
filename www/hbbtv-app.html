@@ -1,23 +1,54 @@
 <!DOCTYPE html>
-<html>
+<html style="height: 100%; padding: 0; margin: 0;">
 <head lang="en">
     <meta charset="UTF-8">
     <title>HbbTV App</title>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
     <script type="text/javascript" src="js/hbbtv-manager-polyfill.js"></script>
 </head>
-<body>
+<body style="height: 96%; ">
 <h3>Sample HbbTV Application</h3>
-<button id="discoverLaunchersBtn">Discover CS Launchers</button>
-<br>
-<div id="info"></div>
-<br>
-<div style="display: none;" id="csAppUrl"><label for="csAppUrlInput">Enter URL to launch on CS: </label><input id="csAppUrlInput"></div>
-<br>
-<ul id="csLaunchers">
+<div style="float: left; width: 48%;">
+    <button id="discoverLaunchersBtn">Discover CS Launchers</button>
+    <br>
+    <div id="info"></div>
+    <br>
+    <ul id="csLaunchers">
 
-</ul>
+    </ul>
+</div>
+<div style="float: left; width: 48%; height: 90%">
+    <textarea id="log" style="width: 98%; height: 98%" disabled="true"></textarea>
+</div>
 <script type="text/javascript">
+    var log = function (msg) {
+        console.log(msg);
+        var logElem = $("#log");
+        logElem.val(logElem.val()+msg+"\n");
+        logElem.scrollTop(logElem[0].scrollHeight);
+    };
+    var parseParameters = function(query){
+        var dict = {};
+        if(query){
+            var params = query.split("&");
+            for (var i = 0; i < params.length; i++) {
+                var index = params[i].indexOf("=");
+                var key = index>-1?params[i].substr(0,index):params[i];
+                var value = index>-1?params[i].substr(index+1):"";
+                if(typeof dict[key] == "undefined"){
+                    dict[key] = value;
+                }
+                else if(typeof dict[key] == "string"){
+                    dict[key] = [dict[key],value];
+                }
+                else if(typeof dict[key] == "object"){
+                    dict[key].push(value);
+                }
+            };
+        }
+        return dict;
+    };
+
     var qualifyURL = function(url){
         var a = document.createElement('a');
         a.href = url;
@@ -27,44 +58,45 @@
     var launchCsApp = function (enumId) {
         var payload = {
             "launch": [
-                {"launchUrl": $("#csAppUrlInput").val()+"?app2appURL="+csManager.getApp2AppRemoteBaseURL(), "appType": "html"}
+                {"launchUrl": qualifyURL("cs-app.html")+"?app2appURL="+csManager.getApp2AppRemoteBaseURL(), "appType": "html"}
             ]
         };
         csManager.launchCSApp(enumId, payload, function (res) {
-            console.log("launch app result code", res);
+            log("launch app result code "+ res);
         });
     };
     var csManager = oipfObjectFactory.createCSManager();
     var app2appLocalBaseUrl = csManager.getApp2AppLocalBaseURL();
-    var appEndpoint = "org.mychannel.myapp";
+    var searchParameters = parseParameters(location.search.substr(1));
+    var channel = searchParameters.channel || "org.mychannel.myapp";
     var createConnection = function (index) {
-        var ws = new WebSocket(app2appLocalBaseUrl + appEndpoint);
+        var ws = new WebSocket(app2appLocalBaseUrl + channel);
         ws.binaryType = "arraybuffer";
         ws.onopen = function(evt) {
-            console.log("Connection ",index," waiting ...");
+            log("Connection "+index+" waiting ...");
         };
         ws.onclose = function(evt) {
-            console.log("Connection ",index," closed.");
+            log("Connection "+index+" closed.");
         };
         ws.onerror = function (evt) {
-            console.log("Connection error.");
+            log("Connection error.");
         };
         ws.onmessage = function(evt) {
             if (evt.data == "pairingcomplete") {
-                console.log("connection ",index," paired");
+                log("connection "+index+" paired");
                 ws.onmessage = function(evt) {
                     if(typeof evt.data == "string"){
-                        console.log( "Received Message: " + evt.data);
+                        log( "Received Message: " + evt.data);
                     }
                     else {
-                        var data = typeof Buffer != "undefined"?new Buffer(evt.data): new Int8Array(evt.data);
-                        console.log("Received Binary Message of " + data.length + " bytes", data);
+                        var data = new Int8Array(evt.data);
+                        log("Received Binary Message of " + data.length + " bytes: ");
                     }
                 };
                 ws.send("Hello from HbbTV App: "+index);
                 createConnection(index+1);
             } else {
-                console.log("Unexpected message received from terminal.");
+                log("Unexpected message received from terminal.");
                 ws.close();
             }
         };
@@ -74,7 +106,6 @@
         $("#info").html("Searching for cs launchers:  please wait ...");
         $("#csLaunchers").empty();
         $("#discoverLaunchersBtn").attr("disabled", true);
-        $("#csAppUrl").hide();
         csManager.discoverCSLaunchers(function (csLaunchers) {
             $("#discoverLaunchersBtn").attr("disabled", false);
             $("#info").empty();
@@ -84,13 +115,9 @@
             if(csLaunchers.length==0){
                 $("#info").html("No cs launchers found. Click on the discover button to search again");
             }
-            else{
-                $("#csAppUrl").show();
-            }
-            console.log("cs launchers found",csLaunchers);
+            log(csLaunchers.length+" cs launchers found");
         });
     });
-    $("#csAppUrlInput").val(qualifyURL("cs-app.html"));
 </script>
 </body>
 </html>

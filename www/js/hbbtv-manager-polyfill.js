@@ -27,10 +27,10 @@
         ws && ws.close();
         ws = new WebSocket(hbbtvCsManagerUrl);
         ws.onopen = function(evt) {
-            console.log("Connection to cs manager established");
+            //console.log("Connection to cs manager established");
         };
         ws.onclose = function(evt) {
-            console.log("Connection to cs manager closed");
+            //console.log("Connection to cs manager closed");
             //window.close();
             if(ws = this){
                 ws = null;
@@ -75,7 +75,7 @@
                     pendingReq.callback.call(req,rsp);
                 }
                 catch (err){
-                    console.error("the ws response is not a valid rpc message",err);
+                    //console.error("the ws response is not a valid rpc message",err);
                 }
 
             }

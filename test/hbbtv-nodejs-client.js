@@ -1,6 +1,6 @@
 /*******************************************************************************
  *
- * Copyright (c) 2013 Louay Bassbouss, Fraunhofer FOKUS, All rights reserved.
+ * Copyright (c) 2015 Louay Bassbouss, Fraunhofer FOKUS, All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -20,28 +20,17 @@
  ******************************************************************************/
 var hbbtv = require("../index.js");
 var HbbTVDialClient = hbbtv.HbbTVDialClient;
-var HbbTVTerminalManager = hbbtv.HbbTVTerminalManager;
-var CsLauncherDialServer = hbbtv.CsLauncherDialServer;
-var http = require('http');
-var express = require("express");
-var app = express();
-var PORT = 8090;
-var DIAL_PREFIX = "/dial";
-app.set("port",PORT);
-app.set("dial-prefix",DIAL_PREFIX);
-http.globalAgent.maxSockets = 100;
-var httpServer = http.createServer(app);
+var WebSocket = hbbtv.WebSocket;
 
 var hbbTVDialClient = new HbbTVDialClient().on("ready", function () {
     console.log("HbbTV DIAL Client is ready");
 }).on("stop", function () {
     console.log("HbbTV DIAL Client is stopped");
 }).on("found", function (terminal) {
-    var info = terminal.getInfo();
-    console.log("DIAL Terminal ", info.friendlyName," (", terminal.getAppLaunchURL(), ") found");
+    console.log("HbbTV Terminal ", terminal.getFriendlyName()," (", terminal.getAppLaunchURL(), ") found");
     var channel = (""+Math.random()).substr(2,16);
     terminal.launchHbbTVApp({
-        "appUrlBase": /*"http://hbbtv-live.irt.de:8080/companionscreen-focus/",*/"http://localhost:63342/peer-hbbtv/www/hbbtv-app.html",//"http://famium.fokus.fraunhofer.de/apps/hbbtv/hbbtv-app.html",
+        "appUrlBase": "http://localhost:63342/node-hbbtv/www/hbbtv-app.html",//"http://fraunhoferfokus.github.io/node-hbbtv/www/hbbtv-app.html",
         "appLocation": "?channel="+channel
     }, function (launchRes,err) {
         if(err){
@@ -49,33 +38,42 @@ var hbbTVDialClient = new HbbTVDialClient().on("ready", function () {
         }
         else {
             console.log("HbbTV App launched successfully: ",launchRes || "");
+            createConnection(terminal, channel);
         }
     });
 }).on("error", function (err) {
     console.error(err);
 });
 
-var csLauncherDialServer = new CsLauncherDialServer(app).on("ready", function () {
-    console.log("HbbTV CS Launcher is ready");
-}).on("stop", function () {
-    console.log("HbbTV CS Launcher is stopped");
-}).on("error", function (err) {
-    console.error(err);
-});
+var createConnection = function (terminal, channel) {
+    var app2appRemoteBaseUrl = terminal.getApp2AppURL();
+    var ws = new WebSocket(app2appRemoteBaseUrl + channel);
+    ws.binaryType = "arraybuffer";
+    ws.onopen = function(evt) {
+        console.log("Connection waiting ...");
+    };
+    ws.onclose = function(evt) {
+        console.log("Connection closed.");
+    };
+    ws.onerror = function (evt) {
+        console.log("Connection error.");
+    };
+    ws.onmessage = function(evt) {
+        if (evt.data == "pairingcomplete") {
+            console.log("pairing complete");
+            ws.onmessage = function(evt) {
+                console.log( "Received Message: " + evt.data);
+            };
+            var data = "Hello from Companion Screen";
+            ws.send(data);
+            var array = [0,1,2,3,4,5,6,7,8,9];
+            data = typeof Buffer != "undefined"?new Buffer(array): new Int8Array(array).buffer;
+            ws.send(data);
+        } else {
+            console.log("Unexpected message received from terminal.");
+            ws.close();
+        }
+    };
+};
 
-var hbbTVTerminalManager = new HbbTVTerminalManager(httpServer).on("ready", function () {
-    console.log("HbbTV Terminal Manager is ready");
-}).on("stop", function () {
-    console.log("HbbTV Terminal Manager is stopped");
-}).on("error", function (err) {
-    console.error(err);
-});
-
-httpServer.listen(PORT, function() {
-    //hbbTVDialClient.start();
-    console.log("HbbTV Client is listening on port ", PORT);
-    console.log("***** Please append the hash query '#port="+PORT+"'"," to the URL of your CS Web App. The JavaScript Lib 'hbbtv-manager-polyfill.js' must be included in the CS Web App");
-    hbbTVTerminalManager.start();
-    csLauncherDialServer.start();
-
-});
+hbbTVDialClient.start();
