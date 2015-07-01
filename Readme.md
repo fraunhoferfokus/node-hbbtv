@@ -108,10 +108,11 @@ The fastest way to test this module is by using the example HbbTV and CS applica
 ### Run example:
 
 1. start `hbbtv` module in `terminal` mode: `hbbtv -m terminal -p 8080`
-2. start `hbbtv` module in `cs` mode: `hbbtv -m cs -p 8090`
+2. start `hbbtv` module in `cs` mode: `hbbtv -m cs -p 8090`    
    > It is possible to start `hbbtv` in ``erminal` and `cs mode on different ports on the same device.
    > For better understanding, it is recommended to use two different devices one for terminal and one for cs. both devices must be
    > in the same network in order to discover and communicate with each others using DIAL and WS.
+
 3. open CS Web App `http://fraunhoferfokus.github.io/node-hbbtv/www/cs-app.html#port=8090` in a browser on the same device from previous step where `hbbtv` is started in `cs` mode.
 4. follow the instructions in the CS App opened in the browser in previous step: You will be able to discover the HbbTV Terminal started in first step, launch an HbbTV App on it and open a WS communication channel to the remote App2App Endpoint of the .
 5. After the HbbTV App is launched on the Terminal, it will be able to discover CSLaunchers, launch CS Web Apps and create WS communication channels to the local App2App Endpoint
@@ -294,19 +295,19 @@ API documentation coming soon.
 </html>
 ```
 
-Develop Node.js CS Client
+Develop Node.js HbbTV CS Client
 -------------------------
 Documentation coming soon
 
-Android CS Client
+Android HbbTV CS Client
 -----------------
 Please contact us famecontact@fokus.fraunhofer.de for more details
 
-iOS CS Client
+iOS HbbTV CS Client
 -------------
 Please contact us famecontact@fokus.fraunhofer.de for more details
 
-Cordova CS Client
+Cordova HbbTV CS Client
 -----------------
 Please contact us famecontact@fokus.fraunhofer.de for more details
 
@@ -333,4 +334,4 @@ Contact us for commercial use famecontact@fokus.fraunhofer.de
 Copyright (c) 2015 Fraunhofer FOKUS
 
 
-[hbbtv20spec] http://hbbtv.org/pages/about_hbbtv/HbbTV_specification_2_0.pdf
+[hbbtv20spec]: http://hbbtv.org/pages/about_hbbtv/HbbTV_specification_2_0.pdf
