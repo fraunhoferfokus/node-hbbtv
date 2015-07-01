@@ -30,7 +30,7 @@ var hbbTVDialClient = new HbbTVDialClient().on("ready", function () {
     console.log("HbbTV Terminal ", terminal.getFriendlyName()," (", terminal.getAppLaunchURL(), ") found");
     var channel = (""+Math.random()).substr(2,16);
     terminal.launchHbbTVApp({
-        "appUrlBase": "http://localhost:63342/node-hbbtv/www/hbbtv-app.html",//"http://fraunhoferfokus.github.io/node-hbbtv/www/hbbtv-app.html",
+        "appUrlBase": "http://fraunhoferfokus.github.io/node-hbbtv/www/hbbtv-app.html",
         "appLocation": "?channel="+channel
     }, function (launchRes,err) {
         if(err){
