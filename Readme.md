@@ -47,16 +47,16 @@ You can use any HbbTV DIAL Client to launch HbbTV applications and use any WebSo
 The following command can be used to start in `terminal` mode on port `8080`:
    * `hbbtv` installed globally
 
-     ```
-     hbbtv -m terminal -p 8080
-     ```
+        ```
+        hbbtv -m terminal -p 8080
+        ```
 
    * `hbbtv` installed locally
 
-      ```
-      cd /path/to/folder/hbbtv/bin
-      node hbbtv.js -m terminal -p 8080
-      ```
+        ```
+        cd /path/to/folder/hbbtv/bin
+        node hbbtv.js -m terminal -p 8080
+        ```
 
 * If it is started in `cs` mode, it will turn you machine in a companion screen that runs a CSLauncher and HbbTV DIAL Client.
 HbbTV Terminal started in previous step will be able to discover companion screens running a CSLauncher and to launch CS applications.
@@ -69,31 +69,31 @@ The following command can be used to start in `cs` mode (companion screen mode) 
 
    * `hbbtv` installed globally
 
-     ```
-     hbbtv -m cs -p 8090
-     ```
+        ```
+        hbbtv -m cs -p 8090
+        ```
 
    * `hbbtv` installed locally
 
-      ```
-      cd /path/to/folder/hbbtv/bin
-      node hbbtv.js -m cs -p 8090
-      ```
+        ```
+        cd /path/to/folder/hbbtv/bin
+        node hbbtv.js -m cs -p 8090
+        ```
 
 * To display `hbbtv` usage options use the following command:
 
    * `hbbtv` installed globally
 
-     ```
-     hbbtv -h
-     ```
+        ```
+        hbbtv -h
+        ```
 
    * `hbbtv` installed locally
 
-      ```
-      cd /path/to/folder/hbbtv/bin
-      node hbbtv.js -h
-      ```
+        ```
+        cd /path/to/folder/hbbtv/bin
+        node hbbtv.js -h
+        ```
 
 Examples
 ========
