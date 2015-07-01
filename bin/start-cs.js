@@ -1,6 +1,6 @@
 /*******************************************************************************
  *
- * Copyright (c) 2013 Louay Bassbouss, Fraunhofer FOKUS, All rights reserved.
+ * Copyright (c) 2015 Louay Bassbouss, Fraunhofer FOKUS, All rights reserved.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -18,19 +18,23 @@
  * AUTHORS: Louay Bassbouss (louay.bassbouss@fokus.fraunhofer.de)
  *
  ******************************************************************************/
+var PORT = global.PORT;
+if(!PORT){
+    console.log("variable 'global.PORT' is missing or not a valid port");
+    process.exit(1);
+}
 var hbbtv = require("../index.js");
-var HbbTVDialClient = hbbtv.DialClient;
-var HbbTVCsLauncher = hbbtv.CsLauncher;
+var HbbTVDialClient = hbbtv.HbbTVDialClient;
+var HbbTVTerminalManager = hbbtv.HbbTVTerminalManager;
+var CsLauncherDialServer = hbbtv.CsLauncherDialServer;
 var http = require('http');
 var express = require("express");
 var app = express();
-var PORT = 8090;
 var DIAL_PREFIX = "/dial";
 app.set("port",PORT);
 app.set("dial-prefix",DIAL_PREFIX);
 http.globalAgent.maxSockets = 100;
 var httpServer = http.createServer(app);
-var opn = require('opn');
 
 var hbbTVDialClient = new HbbTVDialClient().on("ready", function () {
     console.log("HbbTV DIAL Client is ready");
@@ -55,7 +59,7 @@ var hbbTVDialClient = new HbbTVDialClient().on("ready", function () {
     console.error(err);
 });
 
-var hbbTVCsLauncher = new HbbTVCsLauncher(app).on("ready", function () {
+var csLauncherDialServer = new CsLauncherDialServer(app).on("ready", function () {
     console.log("HbbTV CS Launcher is ready");
 }).on("stop", function () {
     console.log("HbbTV CS Launcher is stopped");
@@ -63,8 +67,19 @@ var hbbTVCsLauncher = new HbbTVCsLauncher(app).on("ready", function () {
     console.error(err);
 });
 
+var hbbTVTerminalManager = new HbbTVTerminalManager(httpServer).on("ready", function () {
+    console.log("HbbTV Terminal Manager is ready");
+}).on("stop", function () {
+    console.log("HbbTV Terminal Manager is stopped");
+}).on("error", function (err) {
+    console.error(err);
+});
+
 httpServer.listen(PORT, function() {
-    hbbTVDialClient.start();
-    hbbTVCsLauncher.start();
-    console.log("HbbTV Client is listening on port ", PORT);
+    //hbbTVDialClient.start();
+    console.log("HbbTV Companion Screen is listening on port ", PORT);
+    console.log("***** Please append the hash query '#port="+PORT+"'"," to the URL of your CS Web App.\n***** The JavaScript Lib 'hbbtv-manager-polyfill.js' must be included in the CS Web App");
+    hbbTVTerminalManager.start();
+    csLauncherDialServer.start();
+
 });

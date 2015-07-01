@@ -1,4 +1,4 @@
-(function(ns,oipfObjectFactory){
+(function(){
 
     var parseParameters = function(query){
         var dict = {};
@@ -65,7 +65,7 @@
         return false;
     };
 
-    handleRpcResponse = function (rsp) {
+    var handleRpcResponse = function (rsp) {
         var id = rsp.id;
         var pendingReq = pendingRpcRequests[id];
         if(pendingReq){
@@ -83,14 +83,14 @@
     };
 
     var hash = location.hash.substr(location.hash.lastIndexOf("#")+1);
-    var csManagerParameters = parseParameters(hash);
-    var port = csManagerParameters.port;
-    var hostname = csManagerParameters.hostname;
-    var app2AppLocalUrl = "ws://127.0.0.1:"+port+"/local/";
-    var app2AppRemoteUrl = "ws://"+hostname+":"+port+"/remote/";
-    var hbbtvCsManagerUrl = "ws://127.0.0.1:"+port+"/hbbtvcsmanager";
+    var hashParameters = parseParameters(hash);
+    var port = hashParameters.port;
+    var hostname = hashParameters.hostname;
+    var app2AppLocalUrl = port && "ws://127.0.0.1:"+port+"/local/" || null;
+    var app2AppRemoteUrl = port && hostname && "ws://"+hostname+":"+port+"/remote/" || null;
+    var hbbtvCsManagerUrl = "ws://127.0.0.1:"+port+"/hbbtvmanager";
     var userAgent = navigator.userAgent;
-    var appLaunchUrl = "http://"+hostname+":"+port+"/dial/apps/HbbTV";
+    var appLaunchUrl = port && hostname && "http://"+hostname+":"+port+"/dial/apps/HbbTV" || null;
     var ws = null;
     var rpcCounter = 1;
     var pendingRpcRequests = {};
@@ -103,12 +103,24 @@
      */
     var config = null;
     /**
-     * A DiscoveredTerminalEndpoints object shall have the following properties:
+     * A DiscoveredTerminal object shall have the following properties:
+     *  - readonly Number enum_id: A unique ID for a discovered HbbTV terminal
+     *  - readonly String friendly_name: A discovered terminal may provide a friendly name, e.g. “Muttleys TV”, for an HbbTV application to make use of.
      * 	- readonly String X_HbbTV_App2AppURL: The remote service endpoint on the discovered HbbTV terminal for application to application communication
      * 	- readonly String X_HbbTV_InterDevSyncURL: The remote service endpoint on the discovered HbbTV terminal for inter-device synchronisation
      * 	- readonly String X_HbbTV_UserAgent: The User Agent string of the discovered HbbTV terminal
      */
-    var DiscoveredTerminalEndpoints = function(X_HbbTV_App2AppURL,X_HbbTV_InterDevSyncURL,X_HbbTV_UserAgent){
+    var DiscoveredTerminal = function(enum_id, friendly_name, X_HbbTV_App2AppURL, X_HbbTV_InterDevSyncURL, X_HbbTV_UserAgent){
+        Object.defineProperty(this, "enum_id", {
+            get: function () {
+                return enum_id;
+            }
+        });
+        Object.defineProperty(this, "friendly_name", {
+            get: function () {
+                return friendly_name;
+            }
+        });
         Object.defineProperty(this, "X_HbbTV_App2AppURL", {
             get: function () {
                 return X_HbbTV_App2AppURL;
@@ -127,24 +139,24 @@
     };
     /**
      * A DiscoveredCSLauncher object shall have the following properties:
-     * 	- readonly String enumId: A unique ID for a CS Launcher Application
-     * 	- readonly String friendlyName: A CS Launcher Application may provide a friendly name, e.g. “Muttleys Tablet”, for an HbbTV application to make use of
-     * 	- readonly String csOsId: The CS OS identifier string, as described in clause 14.4.1 of the HbbTV 2.0 Spec
+     * 	- readonly Number enum_id: A unique ID for a CS Launcher Application
+     * 	- readonly String friendly_name: A CS Launcher Application may provide a friendly name, e.g. “Muttleys Tablet”, for an HbbTV application to make use of
+     * 	- readonly String CS_OS_id: The CS OS identifier string, as described in clause 14.4.1 of the HbbTV 2.0 Spec
      */
-    var DiscoveredCSLauncher = function(enumId,friendlyName,csOsId){
+    var DiscoveredCSLauncher = function(enum_id, friendly_name, CS_OS_id){
         Object.defineProperty(this, "enum_id", {
             get: function () {
-                return enumId;
+                return enum_id;
             }
         });
         Object.defineProperty(this, "friendly_name", {
             get: function () {
-                return friendlyName;
+                return friendly_name;
             }
         });
         Object.defineProperty(this, "CS_OS_id", {
             get: function () {
-                return csOsId;
+                return CS_OS_id;
             }
         });
     };
@@ -191,8 +203,11 @@
             for(var appUrl in terminals){
                 var oldTerminal = discoveredTerminals[appUrl];
                 var terminal = terminals[appUrl];
+                terminal.id = appUrl;
                 var enumId = oldTerminal && oldTerminal.enumId || terminalCounter++;
-                var newTerminal = new DiscoveredCSLauncher(enumId, terminal.friendlyName);
+                var newTerminal = new DiscoveredTerminal(enumId, terminal.friendlyName, terminal.app2AppURL, terminal.interDevSyncURL, terminal.userAgent);
+                discoveredTerminals[appUrl] = newTerminal;
+                discoveredTerminals[enumId] = terminal;
                 res.push(newTerminal);
             }
             onTerminalDiscovery && onTerminalDiscovery.call(null,res);
@@ -224,6 +239,34 @@
             var code = rsp.result;
             // TODO
             onCSLaunch && onCSLaunch.call(null,enumId,code);
+        });
+    };
+
+    /**
+     * Boolean launchHbbTVApp(Integer enum_id, Object options, function onCSLaunch)
+     * callback onCSLaunch(int enum_id, int error_code)
+     * Error Codes Values:
+     *	0: op_rejected
+     *  2: op_not_guaranteed
+     *  3: invalid_id
+     *  4: general_error
+     */
+    var launchHbbTVApp = function(enumId,options,onHbbTVLaunch){
+        var terminal = discoveredTerminals[enumId];
+        var code = null;
+        if(!terminal){
+            code = 3;
+            onHbbTVLaunch && onHbbTVLaunch.call(null,enumId,code);
+            return;
+        }
+        return sendRpcRequest({
+            jsonrpc: "2.0",
+            method: "launchHbbTVApp",
+            params: [terminal.id, options]
+        }, function (rsp) {
+            var code = rsp.result;
+            // TODO
+            onHbbTVLaunch && onHbbTVLaunch.call(null,enumId,code);
         });
     };
 
@@ -281,6 +324,12 @@
             }
         });
 
+        Object.defineProperty(this, "launchHbbTVApp", {
+            get: function () {
+                return launchHbbTVApp;
+            }
+        });
+
         Object.defineProperty(this, "getInterDevSyncURL", {
             get: function () {
                 return getInterDevSyncURL;
@@ -306,17 +355,50 @@
         });
     };
 
-    oipfObjectFactory.createCSManager = oipfObjectFactory.createCSManager || function(){
-        return new HbbTVCSManager();
+    var HbbTVTerminalManager = function(){
+        Object.defineProperty(this, "discoverTerminals", {
+            get: function () {
+                return discoverTerminals;
+            }
+        });
+
+        Object.defineProperty(this, "launchHbbTVApp", {
+            get: function () {
+                return launchHbbTVApp;
+            }
+        });
     };
-    var oldIsObjectSupported = oipfObjectFactory.isObjectSupported;
-    oipfObjectFactory.isObjectSupported = function(mimeType){
-        if(mimeType == "application/hbbtvCSManager"){
-            return true;
-        }
-        else {
-            return oldIsObjectSupported && oldIsObjectSupported.app(this,arguments);
-        }
-    };
-    connect();
-})(window.famium = window.famium || {}, window.oipfObjectFactory = window.oipfObjectFactory || {});
+
+    if(port && hostname){
+        window.oipfObjectFactory = window.oipfObjectFactory || {};
+        window.oipfObjectFactory.createCSManager = oipfObjectFactory.createCSManager || function(){
+            return new HbbTVCSManager();
+        };
+        var oldIsObjectSupported = oipfObjectFactory.isObjectSupported;
+        window.oipfObjectFactory.isObjectSupported = function(mimeType){
+            if(mimeType == "application/hbbtvCSManager"){
+                return true;
+            }
+            else {
+                return oldIsObjectSupported && oldIsObjectSupported.app(this,arguments);
+            }
+        };
+        connect();
+    }
+    else if(port){
+        window.hbbtv = window.hbbtv || {};
+        window.hbbtv.createTerminalManager = function(){
+            return new HbbTVTerminalManager();
+        };
+        connect();
+    }
+    else {
+        console.warn("hash parameters 'port' and/or 'hostname' are not detected. " +
+                     "hbbtv-manager-polyfill.js can be used in HbbTV Apps when the hash " +
+                     "parameters 'port' and 'hostname' are specified and in CS Web Apps " +
+                     "when only the 'port' hash parameter is specified. These parameters " +
+                     "will be automatically set when the HbbTV App is launched through the " +
+                     "HbbTVDialServer or the CS Web App is launched through the CsLauncherDialServer. " +
+                     "The hash parameters needs to be set manually if the application is launched by the user.");
+    }
+})();

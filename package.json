@@ -6,18 +6,24 @@
 		"name": "Louay Bassbouss",
 		"email": "louay.bassbouss@fokus.fraunhofer.de"
 	},
-	"keywords": ["ssdp", "upnp", "nsd", "discovery", "launch", "dial","hbbtv","cs"],
+    "preferGlobal": "true",
+	"keywords": ["ssdp", "nsd", "discovery", "launch", "dial","hbbtv","hbbtv 2.0","hbbtv 2.0 cs","cs", "ws", "websocket", "app2app"],
 	"main": "index",
 	"dependencies" : {
-		"peer-dial": "0.0.1",
+		"peer-dial": "0.0.2",
 		"ejs": "1.0.0",
 		"node-uuid": "1.4.1",
 		"ws": "0.7.2",
         "express": "4.12.4",
         "opn": "2.0.0",
 	  	"xml2js": "0.4.9",
-	  	"xmlbuilder": "2.6.4"
+	  	"xmlbuilder": "2.6.4",
+        "commander": "2.8.1"
 	},
+    "bin": {
+      "hbbtv": "bin/index.js"
+    },
+    "repository": "https://github.com/fraunhoferfokus/node-hbbtv.git",
 	"readmeFilename": "Readme.md",
 	"_id": "hbbtv@0.0.1",
 	"_from": "hbbtv@*"

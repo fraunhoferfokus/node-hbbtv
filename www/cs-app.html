@@ -3,39 +3,88 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Companion Screen App</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="js/hbbtv-manager-polyfill.js"></script>
 </head>
 <body>
-Open console to see debug output.<br>
+<h3>Sample CS Web Application</h3>
+<button id="discoverTerminalsBtn">Discover HbbTV Terminals</button>
+<br>
+<div id="info"></div>
+<br>
+<ul id="terminals">
+
+</ul>
 <script type="text/javascript">
-    var app2appRemoteBaseUrl = location.hash.substr(1) || "ws://localhost:8080/remote/" ;
-    var appEndpoint = "org.mychannel.myapp";
-    var ws = new WebSocket(app2appRemoteBaseUrl + appEndpoint);
-    ws.binaryType = "arraybuffer";
-    ws.onopen = function(evt) {
-        console.log("Connection waiting ...");
+    var channel = "org.mychannel.myapp";
+    var qualifyURL = function(url){
+        var a = document.createElement('a');
+        a.href = url;
+        return a.href;
     };
-    ws.onclose = function(evt) {
-        console.log("Connection closed.");
+
+    var launchHbbTVApp = function (index) {
+        var terminal = terminals[index];
+        var options = {
+            "orgId": 0,
+            "appId": 0,
+            "appUrlBase": qualifyURL("hbbtv-app.html"),
+            "appLocation": "?channel="+channel
+        };
+        terminal && terminalManager.launchHbbTVApp(terminal.enum_id, options, function (res) {
+            console.log("launch app result code", res);
+        });
     };
-    ws.onerror = function (evt) {
-        console.log("Connection error.");
+    var connect = function (index) {
+        var terminal = terminals[index];
+        var app2appRemoteBaseUrl = terminal && terminal.X_HbbTV_App2AppURL ;
+        var ws = new WebSocket(app2appRemoteBaseUrl + channel);
+        ws.binaryType = "arraybuffer";
+        ws.onopen = function(evt) {
+            console.log("Connection waiting ...");
+        };
+        ws.onclose = function(evt) {
+            console.log("Connection closed.");
+        };
+        ws.onerror = function (evt) {
+            console.log("Connection error.");
+        };
+        ws.onmessage = function(evt) {
+            if (evt.data == "pairingcomplete") {
+                console.log("connection paired");
+                ws.onmessage = function(evt) {
+                    console.log( "Received Message: " + evt.data);
+                };
+                var data = "Hello from Companion Screen";
+                ws.send(data);
+                var array = [0,1,2,3,4,5,6,7,8,9];
+                data = typeof Buffer != "undefined"?new Buffer(array): new Int8Array(array).buffer;
+                ws.send(data);
+            } else {
+                console.log("Unexpected message received from terminal.");
+                ws.close();
+            }
+        };
     };
-    ws.onmessage = function(evt) {
-        if (evt.data == "pairingcomplete") {
-            console.log("connection paired");
-            ws.onmessage = function(evt) {
-                console.log( "Received Message: " + evt.data);
-            };
-            var data = "Hello from Companion Screen";
-            ws.send(data);
-            var array = [0,1,2,3,4,5,6,7,8,9];
-            data = typeof Buffer != "undefined"?new Buffer(array): new Int8Array(array).buffer;
-            ws.send(data);
-        } else {
-            console.log("Unexpected message received from terminal.");
-            ws.close();
-        }
-    };
+    var terminalManager = hbbtv && hbbtv.createTerminalManager();
+    var terminals = [];
+    $("#discoverTerminalsBtn").click(function () {
+        $("#info").html("Searching for HbbTV Terminals:  please wait ...");
+        $("#terminals").empty();
+        $("#discoverTerminalsBtn").attr("disabled", true);
+        terminalManager.discoverTerminals(function (discoveredTerminals) {
+            terminals = discoveredTerminals;
+            $("#discoverTerminalsBtn").attr("disabled", false);
+            $("#info").empty();
+            $(terminals).each(function (i,terminal) {
+                $("#terminals").append("<li id='"+i+"'>"+terminal.friendly_name+"  <button class='launch' onclick='launchHbbTVApp("+i+")'>Launch</button>  <button class='connect' onclick='connect("+i+")'>Connect</button> <div class='log'></div></li>");
+            });
+            if(terminals.length==0){
+                $("#info").html("No HbbTV Terminals found. Click on the discover button to search again");
+            }
+            console.log("HbbTV terminals found",terminals);
+        });
+    });
 </script>
 </body>
 </html>

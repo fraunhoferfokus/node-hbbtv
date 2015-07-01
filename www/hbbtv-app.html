@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>HbbTV App</title>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
-    <script type="text/javascript" src="js/hbbtv-cs-manager-polyfill.js"></script>
+    <script type="text/javascript" src="js/hbbtv-manager-polyfill.js"></script>
 </head>
 <body>
 <h3>Sample HbbTV Application</h3>
@@ -27,7 +27,7 @@
     var launchCsApp = function (enumId) {
         var payload = {
             "launch": [
-                {"launchUrl": $("#csAppUrlInput").val()+"#"+csManager.getApp2AppRemoteBaseURL(), "appType": "html"}
+                {"launchUrl": $("#csAppUrlInput").val()+"?app2appURL="+csManager.getApp2AppRemoteBaseURL(), "appType": "html"}
             ]
         };
         csManager.launchCSApp(enumId, payload, function (res) {

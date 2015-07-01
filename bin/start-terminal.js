@@ -18,6 +18,11 @@
  * AUTHORS: Louay Bassbouss (louay.bassbouss@fokus.fraunhofer.de)
  *
  ******************************************************************************/
+var PORT = global.PORT;
+if(!PORT){
+    console.log("variable 'global.PORT' is missing or not a valid port");
+    process.exit(1);
+}
 var hbbtv = require("../index.js");
 var HbbTVApp2AppServer = hbbtv.HbbTVApp2AppServer;
 var HbbTVDialServer = hbbtv.HbbTVDialServer;
@@ -25,7 +30,6 @@ var HbbTVCsManager = hbbtv.HbbTVCsManager;
 var http = require('http');
 var express = require("express");
 var app = express();
-var PORT = 8080;
 var DIAL_PREFIX = "/dial";
 var CS_MANAGER_PREFIX = "/csmanager";
 http.globalAgent.maxSockets = 100;
@@ -60,7 +64,8 @@ var hbbTVCsManager = new HbbTVCsManager(/*app*/httpServer).on("ready", function 
 });
 
 httpServer.listen(PORT, function() {
-    console.log("HbbTV Server is listening on port ", PORT);
+    console.log("HbbTV Terminal is listening on port ", PORT);
+    console.log("***** The JavaScript Lib 'hbbtv-manager-polyfill.js' must be included in the HbbTV App");
     hbbtvApp2AppServer.start();
     hbbtvDialServer.start();
     hbbTVCsManager.start();
