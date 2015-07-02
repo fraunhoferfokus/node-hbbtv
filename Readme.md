@@ -416,6 +416,6 @@ Contact
 * [Fraunhofer FOKUS - Competence Center FAME // Future Applications and Media](http://www.fokus.fraunhofer.de/fame)
 * <famecontact@fokus.fraunhofer.de>
 
-![Fraunhofer FOKUS](//famalytics.fokus.fraunhofer.de/piwik.php?idsite=19&rec=1&action_name=node-hbbtv-readme)
+![Fraunhofer FOKUS](https://famalytics.fokus.fraunhofer.de/piwik.php?idsite=19&rec=1&action_name=node-hbbtv-readme)
 
 [hbbtv20spec]: http://hbbtv.org/pages/about_hbbtv/HbbTV_specification_2_0.pdf
