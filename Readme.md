@@ -111,8 +111,8 @@ The fastest way to test this module is by using the example HbbTV and CS applica
 
 1. start `hbbtv` module in `terminal` mode: `hbbtv -m terminal -p 8080`
 2. start `hbbtv` module in `cs` mode: `hbbtv -m cs -p 8090`    
-   > It is possible to start `hbbtv` in `terminal` and `cs mode on different ports on the same device.
-   > For better understanding, it is recommended to use two different devices one for terminal and one for cs. both devices must be
+   > It is possible to start `hbbtv` in `terminal` and `cs` mode on different ports on the same device.
+   > For better understanding, it is recommended to use two different devices one for `terminal` and one for `cs`. both devices must be
    > in the same network in order to discover and communicate with each others using DIAL and WS.
 
 3. open CS Web App `http://fraunhoferfokus.github.io/node-hbbtv/www/cs-app.html#port=8090` in a browser on the same device from previous step where `hbbtv` is started in `cs` mode.
@@ -415,5 +415,7 @@ Contact
 
 * [Fraunhofer FOKUS - Competence Center FAME // Future Applications and Media](http://www.fokus.fraunhofer.de/fame)
 * <famecontact@fokus.fraunhofer.de>
+
+![Fraunhofer FOKUS](//famalytics.fokus.fraunhofer.de/piwik.php?idsite=19&rec=1&action_name=node-hbbtv-readme)
 
 [hbbtv20spec]: http://hbbtv.org/pages/about_hbbtv/HbbTV_specification_2_0.pdf
