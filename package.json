@@ -7,7 +7,7 @@
 		"email": "louay.bassbouss@fokus.fraunhofer.de"
 	},
     "homepage": "http://www.fokus.fraunhofer.de/fame",
-    "license": "(LGPL-3.0 OR Commercial)",
+    "license": "LGPL-3.0",
     "preferGlobal": "true",
 	"keywords": ["ssdp", "nsd", "discovery", "launch", "dial","hbbtv","hbbtv 2.0","hbbtv 2.0 cs","cs", "ws", "websocket", "app2app"],
 	"main": "index",
