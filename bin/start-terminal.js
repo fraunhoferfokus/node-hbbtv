@@ -65,7 +65,7 @@ var hbbTVCsManager = new HbbTVCsManager(/*app*/httpServer).on("ready", function 
 
 httpServer.listen(PORT, function() {
     console.log("HbbTV Terminal is listening on port ", PORT);
-    console.log("***** The JavaScript Lib 'hbbtv-manager-polyfill.js' must be included in the HbbTV App");
+    //console.log("***** The JavaScript Lib 'hbbtv-manager-polyfill.js' must be included in the HbbTV App");
     hbbtvApp2AppServer.start();
     hbbtvDialServer.start();
     hbbTVCsManager.start();

@@ -53,7 +53,7 @@ var hbbTVTerminalManager = new HbbTVTerminalManager(httpServer).on("ready", func
 
 httpServer.listen(PORT, function() {
     console.log("HbbTV Companion Screen is listening on port ", PORT);
-    console.log("***** Please append the hash query '#port="+PORT+"'"," to the URL of your CS Web App.\n***** The JavaScript Lib 'hbbtv-manager-polyfill.js' must be included in the CS Web App");
+    //console.log("***** Please append the hash query '#port="+PORT+"'"," to the URL of your CS Web App.\n***** The JavaScript Lib 'hbbtv-manager-polyfill.js' must be included in the CS Web App");
     hbbTVTerminalManager.start();
     csLauncherDialServer.start();
 

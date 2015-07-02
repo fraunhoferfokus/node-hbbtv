@@ -1,7 +1,7 @@
 Node.js `hbbtv` module
 ====================
 
-The Node.js module `hbbtv` is a feature complete implementation of the HbbTV 2.0 Companion Screen components:
+The Node.js `hbbtv` module is a feature complete implementation of the HbbTV 2.0 Companion Screen components:
 
 * **HbbTV App Launch**: Launching a Companion Screen application from an HbbTV application
 * **CS App Launch**: Launching a broadcast independent HbbTV application on an HbbTV terminal from a Companion Screen application.
@@ -11,15 +11,17 @@ Please refer to the [HbbTV 2.0 spec document][hbbtv20spec] for more details espe
 sections 8.2.6 and 14.
 
 The module is developed by the [Fraunhofer FOKUS´s](https://www.fokus.fraunhofer.de/) Competence Center [Future Applications and Media - FAME](https://www.fokus.fraunhofer.de/fame).
-Please contact us famecontact@fokus.fraunhofer.de for more details or you need help to integrate this module in your product.
+Please contact us <famecontact@fokus.fraunhofer.de> for more details or you need help to integrate this module in your product.
 
 If you find Bugs please submit a new GitHub issue.
 
-Requirement
+Requirements
 ===========
 
-  * [Node.js](https://nodejs.org/). Tested with Node.js v0.12.5 on Windows, Mac and Linux.
-  * npm (comes with Node.js)
+  * [Node.js](https://nodejs.org/). Tested with:
+      * Node.js v0.12.5 on Windows, Mac and Linux.
+      * Node.js v0.10.25 on Windows.
+  * npm (will be installed with Node.js)
 
 Setup
 =====
@@ -297,6 +299,7 @@ API documentation coming soon.
 
 Develop Node.js HbbTV CS Client
 -------------------------------
+
 the `hbbtv` module can also used to implement HbbTV CS Node.js clients without the need to develop CS Web App that runs
 in the Browser. This is for example useful to run HbbTV CS test cases or to use in Node.js applications to discover HbbTV
 terminals, launch HbbTV applications and create WS connections to the remote App2App Endpoint of discovered terminals.
@@ -368,15 +371,15 @@ The following example illustrates the usage of supported features
 
 Android HbbTV CS Client
 -----------------
-Please contact us famecontact@fokus.fraunhofer.de for more details
+Please contact us <famecontact@fokus.fraunhofer.de> for more details
 
 iOS HbbTV CS Client
 -------------
-Please contact us famecontact@fokus.fraunhofer.de for more details
+Please contact us <famecontact@fokus.fraunhofer.de> for more details
 
 Cordova HbbTV CS Client
 -----------------
-Please contact us famecontact@fokus.fraunhofer.de for more details
+Please contact us <famecontact@fokus.fraunhofer.de> for more details
 
 API Documentation
 =================
@@ -388,17 +391,29 @@ use this module in real products, the HbbTV UA needs to be launched instead of t
 by making the HbbTV UA as default Browser or just by starting it directly from this module just by replacing the lines of
 code where the default Browser is launched with your launch command.
 
-API documentation coming soon.
+API documentation for the `hbbtv-manager-polyfill.js` and the `hbbtv` module and its sub-components coming soon.
+
+Contribution
+============
+
+We are grateful for any valuable contribution, like [issue reports](https://github.com/fraunhoferfokus/node-hbbtv/issues),
+[tests](https://github.com/fraunhoferfokus/node-hbbtv/tree/master/test) or [pull requests](https://github.com/fraunhoferfokus/node-hbbtv/pulls).
+
+Moreover, we would love to hear which exciting apps you have created using the `hbbtv` Node.js module.
 
 License
 =======
 
-Free for non commercial use released under the GNU Lesser General Public License v3.0
-, See LICENSE file.
+Free for non commercial use released under the GNU Lesser General Public License v3.0, See LICENSE file.
 
-Contact us for commercial use famecontact@fokus.fraunhofer.de
+Contact us for commercial use <famecontact@fokus.fraunhofer.de>
 
-Copyright (c) 2015 Fraunhofer FOKUS
+Copyright (c) 2015 [Fraunhofer FOKUS](https://www.fokus.fraunhofer.de/)
 
+Contact
+=======
+
+* [Fraunhofer FOKUS - Competence Center FAME // Future Applications and Media](http://www.fokus.fraunhofer.de/fame)
+* <famecontact@fokus.fraunhofer.de>
 
 [hbbtv20spec]: http://hbbtv.org/pages/about_hbbtv/HbbTV_specification_2_0.pdf
