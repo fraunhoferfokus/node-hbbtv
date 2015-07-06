@@ -19,7 +19,8 @@
  *
  ******************************************************************************/
 var program = require("commander");
-program.version("0.0.1")
+var package = require("../package.json");
+program.version(package.version)
     .allowUnknownOption(false)
     .option("-m, --mode <mode>", "select mode. It is either 'terminal' to start as HbbTV Terminal or 'cs' to start as Companion Screen", /^(terminal|cs)$/i)
     .option("-p, --port <port>", "specify the port number of the HbbTV Terminal or CS Launcher. e.g. 8080",parseInt)
