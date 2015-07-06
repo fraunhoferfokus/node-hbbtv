@@ -11,7 +11,7 @@ Please refer to the [HbbTV 2.0 spec document][hbbtv20spec] for more details espe
 sections 8.2.6 and 14.
 
 The module is developed by the [Fraunhofer FOKUS´s](https://www.fokus.fraunhofer.de/) Competence Center [Future Applications and Media - FAME](https://www.fokus.fraunhofer.de/fame).
-Please contact us <famecontact@fokus.fraunhofer.de> for more details or you need help to integrate this module in your product.
+Please contact us <famecontact@fokus.fraunhofer.de> for more details or if you need help to integrate this module in your product.
 
 If you find Bugs please submit a new GitHub issue.
 
@@ -27,25 +27,25 @@ Setup
 =====
 
   * **Install globally**: use `npm install hbbtv -g` to install the module. The `-g` option installs the module globally which is preferred if
-  the module is used just as command line tool. After the module is installed the `hbbtv` command will be available ([Usage section](#usage)
+  the module is used just as CLI. After the module is installed the `hbbtv` command will be available ([Usage section](#usage)
    explains how to use the `hbbtv` command). On Mac and Linux you may need to install the module using `sudo npm install hbbtv -g`.
   Some optional components require Python 2.7, please ignore related error logs if Python 2.7 is not installed on your machine
   or use `npm install hbbtv -g --no-optional` to not install optional components.
   * **Install locally**: This is not preferred if you want to use the module as CLI. Use `npm install hbbtv` without `-g`
    option will create a `node_modules` folder with the `hbbtv` module in it. Please note that the `hbbtv` command will be not
-   available if you install the module locally. Another way to install locally is to clone this git repository and run `npm install`
+   available if you install the module locally. Another way to install locally is to clone this git repository and run `npm install` (or `npm install --no-optional`)
    in the home folder to install dependencies. [Usage section](#usage) explains how to use this module if it is installed locally.
-  * **Integrate in other Node.js applications**: To integrate this module in your Node.js application just add `"hbbtv": "0.0.1"` to
+  * **Integrate in other Node.js applications**: To integrate this module in your Node.js application just add `"hbbtv": "0.0.4"` to
   the `dependencies` element of the `package.json` in your application. In your application use `var hbbtv = require("hbbtv")` to
-  bind the module. For more details about the APIs supported in this module please refer to the [API Documentation](#api-documentation) Section.
+  bind the module. For more details about the APIs supported in this module please refer to the [API Documentation](#api-documentation) section.
 
 Usage
 =====
 
-The `hbbtv` module can be started as HbbTV Terminal or as Companion Screen:
+The `hbbtv` module can be started as HbbTV Terminal (`terminal` mode) or as Companion Screen (`cs` mode):
 
-* If it is started in `terminal` mode, your machine will be seen as a HbbTV 2.0 CS Compliant Terminal.
-You can use any HbbTV DIAL Client to launch HbbTV applications and use any WebSocket client for App2App communication.
+* If it is started in `terminal` mode, your machine will be seen as a HbbTV 2.0 CS compliant Terminal.
+You can use any HbbTV DIAL client to launch HbbTV applications and use any WebSocket client for App2App communication.
 The following command can be used to start in `terminal` mode on port `8080`:
    * `hbbtv` installed globally
 
@@ -61,13 +61,13 @@ The following command can be used to start in `terminal` mode on port `8080`:
         ```
 
 * If it is started in `cs` mode, it will turn you machine in a companion screen that runs a CSLauncher and HbbTV DIAL Client.
-HbbTV Terminal started in previous step will be able to discover companion screens running a CSLauncher and to launch CS applications.
+The HbbTV Terminal started in previous step will be able to discover companion screens running a CSLauncher and to launch CS applications.
 Since the discovery and communication between HbbTV terminals and CSLaunchers is not part of the HbbTV 2.0 Spec, we used here also the DIAL
-protocol to discover CSLaunchers and launch CS Applications. The CSLauncher acts as DIAL Server that offers non-stoppable
-DIAL application called `Famium` which is already registered in the DIAL registry. The application accepts launch request
-in the body of the HTTP Post DIAL Launch Request in the same format as specified in section
-[14.4.2 Payload format for Install and Launch operations][hbbtv20spec] of the spec.
-The following command can be used to start in `cs` mode (companion screen mode) on port `8090`:
+protocol to discover CSLaunchers and launch CS Applications. The CSLauncher acts as DIAL Server that offers a non-stoppable
+DIAL application called `Famium` which is already registered in the [DIAL registry][dial-reg]. The application accepts DIAL launch requests
+in the body of the related HTTP POST requests in the same format as specified in section
+14.4.2 "Payload format for Install and Launch operations" of the [HbbTV 2.0 spec document][hbbtv20spec].
+The following command can be used to start the `hbbtv` module in `cs` mode on port `8090`:
 
    * `hbbtv` installed globally
 
@@ -113,11 +113,11 @@ The fastest way to test this module is by using the example HbbTV and CS applica
 2. start `hbbtv` module in `cs` mode: `hbbtv -m cs -p 8090`    
    > It is possible to start `hbbtv` in `terminal` and `cs` mode on different ports on the same device.
    > For better understanding, it is recommended to use two different devices one for `terminal` and one for `cs`. both devices must be
-   > in the same network in order to discover and communicate with each others using DIAL and WS.
+   > in the same network in order to discover and communicate with each others using DIAL and WebSocket.
 
-3. open CS Web App `http://fraunhoferfokus.github.io/node-hbbtv/www/cs-app.html#port=8090` in a browser on the same device from previous step where `hbbtv` is started in `cs` mode.
-4. follow the instructions in the CS App opened in the browser in previous step: You will be able to discover the HbbTV Terminal started in first step, launch an HbbTV App on it and open a WS communication channel to the remote App2App Endpoint of the .
-5. After the HbbTV App is launched on the Terminal, it will be able to discover CSLaunchers, launch CS Web Apps and create WS communication channels to the local App2App Endpoint
+3. open CS Web App `http://fraunhoferfokus.github.io/node-hbbtv/www/cs-app.html#port=8090` in a browser on the same device from previous step where `hbbtv` is started in `cs` mode (the port must be the same as in previous step).
+4. follow the instructions in the CS App opened in the browser in previous step: You will be able to discover the HbbTV Terminal started in first step, launch an HbbTV App on it and open a WebSocket communication channel to the remote App2App Endpoint of the discovered terminal.
+5. After the HbbTV App is launched on the terminal, it will be able to discover CSLaunchers, launch CS Web Apps and create WebSocket communication channels to the local App2App Endpoint.
 
 Develop HbbTV App
 -----------------
@@ -215,7 +215,7 @@ a WebSocket connection to the App2App Endpoint of the discovered Terminal. The f
    * Start `hbbtv` in `cs` mode: `hbbtv -m cs -p 8090`
    * Open the CS Web App in a Browser on the same device and append `#port=8090` to the URL: `http://www.example.com/cs-app.html#port=8090`
 * The CS Web App needs to include the JavaScript Lib `hbbtv-manager-polyfill.js`
-* The following example uses all JavaScript functions required to discover terminals, launch HbbTV Apps and create WS connection.
+* The following example uses all JavaScript functions required to discover terminals, launch HbbTV Apps and create WebSocket connection.
 API documentation coming soon.
 
 ```html
@@ -261,7 +261,7 @@ API documentation coming soon.
            connect(terminal);
        });
    };
-   // Create a WS connection to the App2App endpoint of the Terminal
+   // Create a WebSocket connection to the App2App endpoint of the Terminal
    var connect = function (terminal) {
        var app2appRemoteBaseUrl = terminal && terminal.X_HbbTV_App2AppURL ;
        var ws = new WebSocket(app2appRemoteBaseUrl + channel);
@@ -302,7 +302,7 @@ Develop Node.js HbbTV CS Client
 
 the `hbbtv` module can also used to implement HbbTV CS Node.js clients without the need to develop CS Web App that runs
 in the Browser. This is for example useful to run HbbTV CS test cases or to use in Node.js applications to discover HbbTV
-terminals, launch HbbTV applications and create WS connections to the remote App2App Endpoint of discovered terminals.
+terminals, launch HbbTV applications and create WebSocket connections to the remote App2App Endpoint of discovered terminals.
 The following example illustrates the usage of supported features
 
  ```javascript
@@ -419,3 +419,4 @@ Contact
 ![Fraunhofer FOKUS](https://famalytics.fokus.fraunhofer.de/piwik.php?idsite=19&rec=1&action_name=node-hbbtv-readme)
 
 [hbbtv20spec]: http://hbbtv.org/pages/about_hbbtv/HbbTV_specification_2_0.pdf
+[dial-reg]: http://www.dial-multiscreen.org/dial-registry/namespace-database#TOC-Registered-Names
