@@ -1,7 +1,7 @@
 {
     "name": "hbbtv",
 	"description": "Nodejs implementation of the HbbTV Companion Screen",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"author": {
 		"name": "Louay Bassbouss",
 		"email": "louay.bassbouss@fokus.fraunhofer.de"
@@ -27,6 +27,6 @@
     },
     "repository": "https://github.com/fraunhoferfokus/node-hbbtv.git",
 	"readmeFilename": "Readme.md",
-	"_id": "hbbtv@0.0.6",
+	"_id": "hbbtv@0.0.7",
 	"_from": "hbbtv@*"
 }

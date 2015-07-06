@@ -31,13 +31,16 @@ Setup
    explains how to use the `hbbtv` command). On Mac and Linux you may need to install the module using `sudo npm install hbbtv -g`.
   Some optional components require Python 2.7, please ignore related error logs if Python 2.7 is not installed on your machine
   or use `npm install hbbtv -g --no-optional` to not install optional components.
+      * **Update globally installed module**: just run `npm update -g hbbtv`
   * **Install locally**: This is not preferred if you want to use the module as CLI. Use `npm install hbbtv` without `-g`
    option will create a `node_modules` folder with the `hbbtv` module in it. Please note that the `hbbtv` command will be not
    available if you install the module locally. Another way to install locally is to clone this git repository and run `npm install` (or `npm install --no-optional`)
    in the home folder to install dependencies. [Usage section](#usage) explains how to use this module if it is installed locally.
-  * **Integrate in other Node.js applications**: To integrate this module in your Node.js application just add `"hbbtv": "0.0.4"` to
+      * **Update locally installed module**: just run `npm update hbbtv` in the same folder where you installed the module (where you ran `npm install hbbtv`). If the module is cloned from git, run `git pull` and then `npm install`.
+  * **Integrate in other Node.js applications**: To integrate this module in your Node.js application just add `"hbbtv": "<version>"` (replace `<version>` with the actual version) to
   the `dependencies` element of the `package.json` in your application. In your application use `var hbbtv = require("hbbtv")` to
   bind the module. For more details about the APIs supported in this module please refer to the [API Documentation](#api-documentation) section.
+      * **Update module integrated in 3rd party applications**: replace `<version>` with a newer version in `package.json` of your Node.js application
 
 Usage
 =====
