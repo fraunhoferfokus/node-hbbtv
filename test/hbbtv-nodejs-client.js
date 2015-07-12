@@ -59,7 +59,7 @@ var createConnection = function (terminal, channel) {
         console.log("Connection error.");
     };
     ws.onmessage = function(evt) {
-        if (evt.data == "pairingcomplete") {
+        if (evt.data == "pairingcompleted") {
             console.log("pairing complete");
             ws.onmessage = function(evt) {
                 console.log( "Received Message: " + evt.data);

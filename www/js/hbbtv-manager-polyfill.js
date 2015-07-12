@@ -246,10 +246,10 @@
     var launchCSApp = function(enumId,payload,onCSLaunch){
         var csLauncher = discoveredLaunchers[enumId];
         var code = null;
-        if(!csLauncher){
+        if(!csLauncher || typeof payload != "string"){
             code = 3;
             onCSLaunch && onCSLaunch.call(null,enumId,code);
-            return;
+            return false;
         }
         return sendRpcRequest({
             jsonrpc: "2.0",
@@ -257,7 +257,7 @@
             params: [csLauncher.id, payload]
         }, function (rsp) {
             var code = rsp.result;
-            // TODO
+            // TODO check code
             onCSLaunch && onCSLaunch.call(null,enumId,code);
         });
     };
@@ -277,7 +277,7 @@
         if(!terminal){
             code = 3;
             onHbbTVLaunch && onHbbTVLaunch.call(null,enumId,code);
-            return;
+            return false;
         }
         return sendRpcRequest({
             jsonrpc: "2.0",

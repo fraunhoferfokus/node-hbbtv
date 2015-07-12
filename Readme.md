@@ -183,7 +183,7 @@ a WebSocket connection to the local App2App Endpoint. The following steps are ne
             console.log("Connection error.");
         };
         ws.onmessage = function(evt) {
-            if (evt.data == "pairingcomplete") {
+            if (evt.data == "pairingcompleted") {
                 console.log("connection ",index," paired");
                 ws.onmessage = function(evt) {
                     if(typeof evt.data == "string"){
@@ -279,7 +279,7 @@ API documentation coming soon.
            console.log("Connection error.");
        };
        ws.onmessage = function(evt) {
-           if (evt.data == "pairingcomplete") {
+           if (evt.data == "pairingcompleted") {
                console.log("connection paired");
                ws.onmessage = function(evt) {
                    console.log( "Received Message: " + evt.data);
@@ -352,7 +352,7 @@ The following example illustrates the usage of supported features
          console.log("Connection error.");
      };
      ws.onmessage = function(evt) {
-         if (evt.data == "pairingcomplete") {
+         if (evt.data == "pairingcompleted") {
              console.log("pairing complete");
              ws.onmessage = function(evt) {
                  console.log( "Received Message: " + evt.data);

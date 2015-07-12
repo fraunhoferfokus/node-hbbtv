@@ -79,11 +79,11 @@
     };
 
     var launchCsApp = function (enumId) {
-        var payload = {
+        var payload = payload = JSON.stringify({
             "launch": [
                 {"launchUrl": qualifyURL("cs-app.html")+"?app2appURL="+csManager.getApp2AppRemoteBaseURL(), "appType": "html"}
             ]
-        };
+        });
         csManager.launchCSApp(enumId, payload, function (res) {
             log("launch app result code "+ res);
         });
@@ -105,7 +105,7 @@
             log("Connection error.");
         };
         ws.onmessage = function(evt) {
-            if (evt.data == "pairingcomplete") {
+            if (evt.data == "pairingcompleted") {
                 log("connection "+index+" paired");
                 ws.onmessage = function(evt) {
                     if(typeof evt.data == "string"){

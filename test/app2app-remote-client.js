@@ -24,7 +24,7 @@
             console.log("Connection error.");
         };
         ws.onmessage = function(evt) {
-            if (evt.data == "pairingcomplete") {
+            if (evt.data == "pairingcompleted") {
                 console.log("connection paired");
                 ws.onmessage = function(evt) {
                     console.log( "Received Message: " + evt.data);
