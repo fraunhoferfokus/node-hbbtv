@@ -81,6 +81,8 @@
     var launchHbbTVApp = function (index) {
         var terminal = terminals[index];
         var options = {
+            "appId": 1,
+            "orgId": 2,
             "appUrlBase": qualifyURL("hbbtv-app.html"),
             "appLocation": "?channel="+channel
         };
@@ -92,6 +94,7 @@
         var terminal = terminals[index];
         var app2appRemoteBaseUrl = terminal && terminal.X_HbbTV_App2AppURL || app2appURL;
         var ws = new WebSocket(app2appRemoteBaseUrl + channel);
+        log("Connect to App2App Endpoint: "+ app2appRemoteBaseUrl + channel);
         ws.binaryType = "arraybuffer";
         ws.onopen = function(evt) {
             log("Connection waiting ...");
@@ -103,7 +106,6 @@
             log("Connection error.");
         };
         ws.onmessage = function(evt) {
-            console.log(evt.data);
             if (evt.data == "pairingcompleted") {
                 log("connection paired");
                 ws.onmessage = function(evt) {
