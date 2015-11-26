@@ -108,7 +108,7 @@ Run Example HbbTV App and CS Web App hosted on GitHub
 
 The fastest way to test this module is by using the example HbbTV and CS applications hosted on github.io:
 * HbbTV App: `http://fraunhoferfokus.github.io/node-hbbtv/www/hbbtv-app.html`
-* CS Web App: `http://faunhoferfokus.github.io/node-hbbtv/www/cs-app.html`
+* CS Web App: `http://fraunhoferfokus.github.io/node-hbbtv/www/cs-app.html`
 
 ### Run example:
 
