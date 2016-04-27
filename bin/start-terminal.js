@@ -21,6 +21,7 @@
 var PORT = global.PORT;
 var INTERDEVSYNC_URL = global.INTERDEVSYNC_URL;
 var USERAGENT = global.USERAGENT;
+var OPN_PARAMS = global.OPN_PARAMS;
 if(!PORT){
     console.log("variable 'global.PORT' is missing or not a valid port");
     process.exit(1);
@@ -41,6 +42,7 @@ app.set("dial-prefix",DIAL_PREFIX);
 app.set("cs-manager-prefix", CS_MANAGER_PREFIX);
 app.set("inter-dev-sync-url", INTERDEVSYNC_URL);
 app.set("user-agent", USERAGENT);
+app.set("opn-params", OPN_PARAMS);
 // The HTTP Server is used to in the HbbTVApp2AppServer and the HbbTVDialServer
 var httpServer = http.createServer(app);
 
