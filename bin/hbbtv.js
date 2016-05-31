@@ -27,6 +27,7 @@ program.version(package.version)
     .option("-i, --interdevsync-url <url>", "specify the URL of the inter-device synchronisation CSS-CII server. Applies to 'terminal' mode only. Optional.")
     .option("-u, --useragent <ua-string>", "specify the user agent string to be advertised. Applies to 'terminal' mode only. Optional.")
     .option("-o, --opn-args <args>",  "specify the arguments to opn (used for launching apps), separated by | characters. e.g. firefox|-no-remote. Optional.")
+    .option("-f, --friendly-name <name>",  "specify the device name to be advertised (overriding system hostname). Applies to 'terminal' mode only. Optional.")
 
 program.parse(process.argv);
 var port = program.port>0 && program.port || null;
@@ -34,6 +35,7 @@ var mode = program.mode || null;
 var interDevSyncUrl = program["interdevsyncUrl"] || null;
 var userAgent = program["useragent"] || null;
 var opn_params = program["opnArgs"] ? program["opnArgs"].split('|') : undefined;
+var friendlyName = program["friendlyName"] || null;
 
 if(port){
     global.PORT = port;
@@ -41,6 +43,7 @@ if(port){
     if(mode == "terminal"){
         global.INTERDEVSYNC_URL = interDevSyncUrl;
         global.USERAGENT = userAgent;
+        global.FRIENDLY_NAME = friendlyName;
         require("./start-terminal.js");
     }
     else if(mode == "cs"){
