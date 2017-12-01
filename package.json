@@ -13,7 +13,6 @@
 	"main": "index",
 	"dependencies" : {
 		"peer-dial": "0.0.7",
-		"ejs": "1.0.0",
 		"node-uuid": "1.4.1",
 		"ws": "0.7.2",
         "express": "4.12.4",
