@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSS Test</title>
+    <script src="js/css-ts-client.js"></script>
+    <script src="js/css-cii-client.js"></script>
+    <script>
+        /*var tsClient = new CSSTSClient("ws://localhost:8080/css/ts");
+        tsClient.onError = function (err) {
+            console.error(err);
+        };
+        tsClient.onConnect = function(){
+            console.log("connected");
+            tsClient.setup({
+                contentIdStem: "",
+                timelineSelector: "urn:dvb:css:timeline:ct"
+            });
+            setTimeout(function () {
+                tsClient.sendAcEaLaPrTimestamps({
+                    "earliest": {
+                        "contentTime" : "100674",
+                        "wallClockTime" : "9000150284310"
+                    },
+                    "latest": {
+                        "contentTime" : "100674",
+                        "wallClockTime" : "9008150284310"
+                    }
+                });
+            },2000);
+        };
+        tsClient.onDisconnect = function(){
+            console.log("disconnected");
+        };
+        tsClient.onReceiveControlTimestamp = function (ct) {
+            console.log("receive control timestamp",ct);
+        };
+        tsClient.connect();*/
+    </script>
+    <script>
+        var ciiClient = new CSSCIIClient("ws://localhost:8080/css/cii");
+        ciiClient.onError = function (err) {
+            console.error(err);
+        };
+        ciiClient.onConnect = function(){
+            console.log("connected");
+        };
+        ciiClient.onDisconnect = function(){
+            console.log("disconnected");
+        };
+        ciiClient.onCiiMessage = function (ciiMsg) {
+            console.log("receive cii msg",ciiMsg);
+        };
+        ciiClient.connect();
+    </script>
+</head>
+<body>
+
+</body>
+</html>

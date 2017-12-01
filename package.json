@@ -1,18 +1,18 @@
 {
     "name": "hbbtv",
 	"description": "Nodejs implementation of the HbbTV Companion Screen",
-	"version": "0.0.10",
+	"version": "0.0.11",
 	"author": {
 		"name": "Louay Bassbouss",
 		"email": "louay.bassbouss@fokus.fraunhofer.de"
 	},
     "homepage": "http://www.fokus.fraunhofer.de/fame",
     "license": "LGPL-3.0",
-    "preferGlobal": "true",
+    "preferGlobal": true,
 	"keywords": ["ssdp", "nsd", "discovery", "launch", "dial","hbbtv","hbbtv 2.0","hbbtv 2.0 cs","cs", "ws", "websocket", "app2app"],
 	"main": "index",
 	"dependencies" : {
-		"peer-dial": "0.0.7",
+		"peer-dial": "0.0.8",
 		"node-uuid": "1.4.1",
 		"ws": "0.7.2",
         "express": "4.12.4",
@@ -26,6 +26,6 @@
     },
     "repository": "https://github.com/fraunhoferfokus/node-hbbtv.git",
 	"readmeFilename": "Readme.md",
-	"_id": "hbbtv@0.0.10",
+	"_id": "hbbtv@0.0.11",
 	"_from": "hbbtv@*"
 }
