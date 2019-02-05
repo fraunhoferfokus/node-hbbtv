@@ -21,14 +21,21 @@
  *
  ******************************************************************************/
 -->
-<html style="height: 100%; padding: 0; margin: 0;">
+<html style="height: 100%;width: 100%; padding: 0; margin: 0; background-color: #FFFFFF;">
 <head lang="en">
     <meta charset="UTF-8">
     <title>HbbTV App</title>
+    <script type="text/javascript" src="js/hbbtvlib.js"></script>
     <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
     <script type="text/javascript" src="js/hbbtv-manager-polyfill.js"></script>
+    <script>
+       window.onload = function(){
+         hbbtvlib_initialize();
+         hbbtvlib_show();
+       };
+    </script>
 </head>
-<body style="height: 96%; ">
+<body style="height: 100%;width: 100%; padding: 0; margin: 0; background-color: #FFFFFF; overflow: hidden;">
 <h3>Sample HbbTV Application</h3>
 <div style="float: left; width: 48%;">
     <button id="discoverLaunchersBtn">Discover CS Launchers</button>
@@ -87,6 +94,9 @@
             log("launch app result code "+ res);
         });
     };
+    $(document).keydown(function(event){
+       log("Key with code "+event.which+" pressed");
+    });
     var csManager = oipfObjectFactory.createCSManager();
     var app2appLocalBaseUrl = csManager.getApp2AppLocalBaseURL();
     var searchParameters = parseParameters(location.search.substr(1));
