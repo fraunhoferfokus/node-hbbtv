@@ -25,13 +25,13 @@
     ],
     "main": "index",
     "dependencies": {
-        "commander": "^2.8.1",
-        "express": "^4.19.2",
-        "node-uuid": "^1.4.8",
-        "opn": "2.0.0",
+        "commander": "^13.1.0",
+        "express": "^4.21.2",
+        "open": "^10.1.0",
         "peer-dial": "0.0.8",
-        "ws": "^8.17.0",
-        "xml2js": "0.5.0",
+        "uuid": "^11.1.0",
+        "ws": "^8.18.1",
+        "xml2js": "0.6.2",
         "xmlbuilder": "^15.1.1"
     },
     "bin": {
