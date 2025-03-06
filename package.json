@@ -28,7 +28,7 @@
         "commander": "^13.1.0",
         "express": "^4.21.2",
         "open": "^10.1.0",
-        "peer-dial": "0.0.8",
+        "peer-dial": "file:../peer-dial",
         "uuid": "^11.1.0",
         "ws": "^8.18.1",
         "xml2js": "0.6.2",
