@@ -18,8 +18,9 @@
  * AUTHORS: Louay Bassbouss (louay.bassbouss@fokus.fraunhofer.de)
  *
  ******************************************************************************/
-var program = require("commander");
+var { Command } = require("commander");
 var package = require("../package.json");
+var program = new Command();
 program.version(package.version)
     .allowUnknownOption(false)
     .option("-m, --mode <mode>", "select mode. It is either 'terminal' to start as HbbTV Terminal or 'cs' to start as Companion Screen", /^(terminal|cs)$/i)
@@ -30,12 +31,13 @@ program.version(package.version)
     .option("-f, --friendly-name <name>",  "specify the device name to be advertised (overriding system hostname). Applies to 'terminal' mode only. Optional.")
 
 program.parse(process.argv);
-var port = program.port>0 && program.port || null;
-var mode = program.mode || null;
-var interDevSyncUrl = program["interdevsyncUrl"] || null;
-var userAgent = program["useragent"] || null;
-var opn_params = program["opnArgs"] ? program["opnArgs"].split('|') : undefined;
-var friendlyName = program["friendlyName"] || null;
+var options = program.opts();
+var port = options.port>0 && options.port || null;
+var mode = options.mode || null;
+var interDevSyncUrl = options.interdevsyncUrl || null;
+var userAgent = options.useragent || null;
+var opn_params = options.opnArgs ? options.opnArgs.split('|') : undefined;
+var friendlyName = options.friendlyName || null;
 
 if(port){
     global.PORT = port;

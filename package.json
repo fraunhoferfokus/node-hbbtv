@@ -1,31 +1,44 @@
 {
     "name": "hbbtv",
-	"description": "Nodejs implementation of the HbbTV Companion Screen",
-	"version": "0.0.11",
-	"author": {
-		"name": "Louay Bassbouss",
-		"email": "louay.bassbouss@fokus.fraunhofer.de"
-	},
+    "description": "Nodejs implementation of the HbbTV Companion Screen",
+    "version": "0.0.11",
+    "author": {
+        "name": "Louay Bassbouss",
+        "email": "louay.bassbouss@fokus.fraunhofer.de"
+    },
     "homepage": "http://www.fokus.fraunhofer.de/fame",
     "license": "LGPL-3.0",
     "preferGlobal": true,
-	"keywords": ["ssdp", "nsd", "discovery", "launch", "dial","hbbtv","hbbtv 2.0","hbbtv 2.0 cs","cs", "ws", "websocket", "app2app"],
-	"main": "index",
-	"dependencies" : {
-		"peer-dial": "0.0.8",
-		"node-uuid": "1.4.1",
-		"ws": "0.7.2",
-        "express": "4.12.4",
-        "opn": "2.0.0",
-	  	"xml2js": "0.5.0",
-	  	"xmlbuilder": "2.6.4",
-        "commander": "2.8.1"
-	},
+    "keywords": [
+        "ssdp",
+        "nsd",
+        "discovery",
+        "launch",
+        "dial",
+        "hbbtv",
+        "hbbtv 2.0",
+        "hbbtv 2.0 cs",
+        "cs",
+        "ws",
+        "websocket",
+        "app2app"
+    ],
+    "main": "index",
+    "dependencies": {
+        "commander": "^13.1.0",
+        "express": "^4.21.2",
+        "open": "^10.1.0",
+        "peer-dial": "file:../peer-dial",
+        "uuid": "^11.1.0",
+        "ws": "^8.18.1",
+        "xml2js": "0.6.2",
+        "xmlbuilder": "^15.1.1"
+    },
     "bin": {
-      "hbbtv": "bin/index.js"
+        "hbbtv": "bin/index.js"
     },
     "repository": "https://github.com/fraunhoferfokus/node-hbbtv.git",
-	"readmeFilename": "Readme.md",
-	"_id": "hbbtv@0.0.11",
-	"_from": "hbbtv@*"
+    "readmeFilename": "Readme.md",
+    "_id": "hbbtv@0.0.11",
+    "_from": "hbbtv@*"
 }
